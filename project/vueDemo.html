@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+  </head>
+  <body>
+    <!-- ============================================================= -->
+    <!-- 跑马灯效果 -->
+    <!-- <div class="run"> 
+      <input type="button" value="run" @click="run" />
+      <input type="button" value="stop" @click="stop" />
+      <h3>{{msg}}</h3>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: ".run",
+        data: {
+          msg: "1234567",
+          timer: null,
+        },
+        methods: {
+          run() {
+            if (this.timer !== null) return;
+            this.timer = setInterval(() => {
+              const header = this.msg.substring(0, 1);
+              const body = this.msg.substring(1);
+              this.msg = body + header;
+            }, 300);
+          },
+          stop() {
+            clearInterval(this.timer);
+            this.timer = null;
+          },
+        },
+      });
+    </script>-->
+    <!-- ============================================================= -->
+    <!-- 列表添加和删除案例 -->
+    <!-- <div class="box">
+        数据添加
+        ID:<input type="text" v-model="Id" /><br />
+        Name:<input type="text" v-model="name" /><br />
+        <input type="button" value="ADD" @click="add" /><br />
+        数据查询
+        Search:<input type="text" v-model="keywords" @change="searchName" />
+        <table>
+          <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>CTime</th>
+            <th>DO</th>
+          </thead>
+          <tbody>
+            将结果应用到页面上而非整个list
+            <tr v-for="item in searchName()">
+              <td>{{ item.Id}}</td>
+              <td>{{ item.name}}</td>
+              <td>{{ item.ctime}}</td>
+              消除a标签默认跳转
+              <td><a href="" @click.prevent="remove(item.Id)">删除</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div> 
+      <script>
+        var vm = new Vue({
+          el: ".box",
+          data: {
+            Id: "",
+            name: "",
+            keywords: "", //关键字查找
+            list: [
+              { Id: 1, name: "123", ctime: new Date() },
+              { Id: 2, name: "124", ctime: new Date() },
+            ],
+          },
+          methods: {
+            add() {
+              this.list.push({
+                Id: this.Id,
+                name: this.name,
+                ctime: new Date(),
+              });
+              this.Id = this.name = ""; //重置
+            },
+            remove(id) {
+              // for (var i = 0; i < this.list.length; i++) {
+              //   if (this.list[i].Id == id) {
+              //     this.list.splice(i, 1);
+              //     return;
+              //   }
+              // }
+              //ES6数组新方法，返回与匹配相同的值的索引
+              const index = this.list.findIndex(function (item) {
+                return item.Id == id; //item--list中的每一项
+              });
+              this.list.splice(index, 1); //删除数组中的数据
+              console.log(index);
+            },
+            searchName() {
+              // let result = [];
+              // for (let i = 0; i < this.list.length; i++) {
+              //   if (this.list[i].name.indexOf(this.keywords) != -1) {
+              //     result.push(this.list[i]);
+              //     //this.list[i].name.includes(this.keywords)
+              //   }
+              // }
+              // return result;
+
+              return this.list.filter((item) => {
+                return item.name.includes(this.keywords);
+              });
+            },
+          },
+        });
+      </script>-->
+    <!-- ============================================================= -->
+    <!-- 点击切换样式 -->
+    <!-- <style>
+      .normal {
+        color: blue;
+      }
+      .click {
+        color: red;
+        font-weight: bolder;
+      }
+    </style>
+    <div class="box">
+      <ul>
+        <li
+          v-for="(item, index) in list"
+          :key="item.id"
+          :class='["normal",{click:index==selectIndex?true:false}]'
+          @click="change(index)"
+        >
+          {{ item.id}}--{{ item.name}}
+        </li>
+      </ul>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: ".box",
+        data: {
+          selectIndex: 0,
+          list: [
+            { id: 1, name: 123 },
+            { id: 2, name: 123 },
+            { id: 3, name: 123 },
+            { id: 4, name: 123 },
+          ],
+        },
+        methods: {
+          change(index) {
+            this.selectIndex = index;
+          },
+        },
+      });
+    </script> -->
+    <!-- ============================================================= -->
+    <!-- 数据库版 -->
+    <!-- <div class="box">
+      <input type="button" value="get" @click="getInfo" />
+    </div>
+    <script src="js/axios.js"></script>
+    <script>
+      Vue.prototype.$http = axios;
+      var vm = new Vue({
+        el: ".box",
+        data: {
+          list: [],
+        },
+        created() {
+          this.getInfo();
+        },
+        methods: {
+          async getInfo() {
+            const { data } = await this.$http.get("http://127.0.0.1:27017");
+            console.log(data);
+            //如果数据获取成功，则把数据挂载带data上
+            if (data.status == 0) this.list = data.message;
+          },
+        },
+      });
+    </script> -->
+    <!-- ============================================================= -->
+    <!-- vue动画 -->
+    <style>
+      /* .v-enter,
+      .v-leave-to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      .v-enter-active,
+      .v-leave-active {
+        transition: all 0.5s ease;
+      } */
+      .circle {
+        width: 10px;
+        height: 10px;
+        background-color: rebeccapurple;
+        border-radius: 50%;
+      }
+      /* 列表过渡动画 */
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        border: 1px dashed #ccc;
+        cursor: pointer;
+      }
+      li:hover {
+        background-color: orange;
+      }
+      .v-enter,
+      .v-leave-to {
+        opacity: 0;
+        transform: translateY(200px);
+      }
+      .v-enter-active,
+      .v-leave-active {
+        transition: all 0.5s ease;
+      }
+      .v-move {
+        transition: all 1s ease;
+      }
+      .v-leave-active {
+        position: absolute;
+      }
+    </style>
+    <!-- <div class="box">
+      <input type="button" value="toggle" @click="flag=!flag" />
+      <transition
+        @before-enter="beforeEnter"
+        @enter="Enter"
+        @after-enter="afterEnter"
+      >
+        /*<h3 v-show="flag">ahfafhjkahfkjdhfsj</h3>*/
+        <div class="circle" v-show="flag"></div>
+      </transition>
+      列表过渡动画
+      <ul>
+        <transition-group tag="ul">
+          <li v-for="(item, i) in list" :key="item.id" @click="remove(i)">
+            {{item.name}}
+          </li>
+        </transition-group>
+      </ul>
+    </div> -->
+    <script>
+      // var vm = new Vue({
+      //   el: ".box",
+      //   data: {
+      //     flag: false,
+      //     list: [
+      //       { id: 1, name: "zzc" },
+      //       { id: 2, name: "zza" },
+      //       { id: 3, name: "zzs" },
+      //       { id: 3, name: "zzd" },
+      //     ],
+      //   },
+      //   methods: {
+      //     remove(index) {
+      //       this.list.splice(index, 1);
+      //     },
+      //     beforeEnter(el) {
+      //       el.style.transform = "translate(0,0)";
+      //     },
+      //     Enter(el, done) {
+      //       el.offsetLeft; //固定写法，不然无法实现动画效果
+      //       el.style.transform = "translate(100px,200px)";
+      //       el.style.transition = " all 1s ease";
+      //       done(); //动画执行后会自动调用done函数，这个是afterEnter的引用
+      //     },
+      //     afterEnter(el) {
+      //       // 取非操作跳过后半场动画
+      //       this.flag = !this.flag;
+      //     },
+      //   },
+      // });
+    </script>
+    <!-- ============================================================= -->
+    <!-- 组件切换 -->
+    <div class="box">
+      <input type="button" value="登录" @click="flag=true" />
+      <input type="button" value="注册" @click="flag=false" />
+      <login v-if="flag"></login>
+      <reg v-else="flag"></reg>
+    </div>
+    <script>
+      Vue.component("login", {
+        template: "<p>显示登录</p>",
+      });
+      Vue.component("reg", {
+        template: "<p>显示注册</p>",
+      });
+      var vm = new Vue({
+        el: ".box",
+        data: {
+          flag: false,
+        },
+      });
+    </script>
+    <!-- ============================================================= -->
+    <!-- ============================================================= -->
+    <!-- ============================================================= -->
+  </body>
+</html>

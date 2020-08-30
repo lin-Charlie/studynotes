@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        text-decoration: none;
+        color: black;
+      }
+      /* 动态添加表格数据 */
+      /* .wrapper {
+        width: 300px;
+        height: auto;
+        position: absolute;
+        left: 50%;
+        top: 20%;
+        margin-left: -150px;
+      }
+      th {
+        width: 150px;
+        height: 30px;
+        background-color: cornflowerblue;
+      }
+      td {
+        width: 150px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        background-color: darkgrey;
+      }
+      .input {
+        width: 330px;
+        height: 120px;
+        position: absolute;
+        left: 50%;
+        border: 2px solid black;
+        border-radius: 10%;
+        margin-left: -150px;
+        background-color: rgb(243, 233, 233);
+        display: none;
+      }
+      .btnx {
+        width: 20px;
+        float: right;
+      }
+      .line1 {
+        margin-left: 20px;
+      }
+      .line2,
+      .line3 {
+        margin-left: 20px;
+        margin-top: 20px;
+      } */
+      /* 可编辑表格 */
+      /* td {
+        border: 2px solid aqua;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+        width: 80px;
+        height: 30px;
+      } */
+      /* 弹球 */
+      /* div {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        border-radius: 50%;
+        background-color: aqua;
+      } */
+      /* 移动元素 */
+      /* .wrapper{
+        width: 300px;
+        height: 200px;
+        position: absolute;
+        left: 50%;
+        margin-left: -150px;
+      }
+      .p1{
+        width: 100px;
+        height: 200px;
+        float: left;
+      }
+      p{
+        width: 100px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        background-color: aqua;
+      }
+      .input{
+        width: 100px;
+        height: 200px;
+        float: left;
+      }
+      input{
+        width: 100px;
+        height: 50px;
+      }
+      .p2{
+        width: 100px;
+        height: 200px;
+        float: left;
+      } */
+      /* 隐藏动画案例 */
+      /* div {
+        width: 640px;
+        height: 210px;
+      }
+      img {
+        width: 200px;
+        height: 100px;
+        float: left;
+        margin-left: 10px;
+      }
+      img::after {
+        content: "";
+        display: inline-block;
+        overflow: hidden;
+      } */
+      /* 下拉菜单 */
+      /* .wrapper ul li {
+        width: 60px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border: 1px solid blue;
+        float: left;
+        background-color: aqua;
+      }
+      .wrapper li ul {
+        display: none;
+      }
+      .wrapper li > ul > li {
+        width: 60px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border: 1px solid blue;
+        background-color: chocolate;
+      } */
+    </style>
+    <script src="js/jquery-1.11.3.js"></script>
+    <script>
+      //动态添加表格数据
+      $(function () {
+        //弹出输入框
+        // $(".creat").click(function () {
+        //   $(".input").css("display", "block");
+        // });
+        // //隐藏输入框
+        // $(".btnx").click(function () {
+        //   $(".input").css("display", "none");
+        // });
+        // //添加数据
+        // $(".add").click(function () {
+        //   var text = $(".textadd").val();
+        //   $(
+        //     "<tr><td>" +
+        //       text +
+        //       '</td><td><a href="#" class="get">GET</a></td></tr>'
+        //   ).appendTo($("table"));
+        //   $(".textadd").val(""); //清空输入框内容
+        //   $(".input").css("display", "none");
+        // });
+        // //消除数据
+        // $(".t-tb").on("click", ".get", function () {
+        //   $(this).parent().parent().remove();//需要动态绑定事件否则新添加的无法删除
+        // });
+      });
+      // 可编辑表格
+      $(function () {
+        // $("td").click(function () {
+        //   var td = $(this);
+        //   var preText = td.text(); //获取原标签的值
+        //   td.html(""); //清空原标签
+        //   if (td.children("input").length > 0) {
+        //     return false; //判断是否已经存在
+        //   }
+        //   var obj = $('<input type="text">');
+        //   obj
+        //     .val(preText)
+        //     .width(td.width())
+        //     .height(td.height())
+        //     .css({ fontSize: "20px", border: "0px" })
+        //     .appendTo($(this))
+        //     .trigger("focus")
+        //     .trigger("select"); //选中标签内容
+        //   obj.keyup(function (event) {
+        //     if (event.which == 13) {
+        //       td.html($(this).val()); //回车键保存
+        //     }
+        //     if (event.which == 27) {
+        //       td.html(preText); //esc退出不保存
+        //     }
+        //   });
+        // });
+      });
+      //屏幕弹球
+      $(function () {
+        // var timer = null;
+        // var i = 0;
+        // $(".creat").click(function () {
+        //   i++;
+        //   num = i % 2;
+        //   var obj = $("<div></div>").appendTo("body");
+        //   console.log(num);
+        //   var l = 0,
+        //     r = 0;
+        //   if (num - 1) {
+        //     l = Math.random() * 100;
+        //     console.log(l);
+        //     r = Math.random() * 100;
+        //   } else {
+        //     l = Math.random() * 1000;
+        //     console.log(l);
+        //     r = Math.random() * 1000;
+        //   }
+        //   var x = 5;
+        //   var y = 5;
+        //   timer = setInterval(function () {
+        //     wowth = $(window).width() - obj.outerWidth();
+        //     wowgh = $(window).height() - obj.outerHeight();
+        //     if (l > wowth || l < 0) {
+        //       x = -x;
+        //     }
+        //     if (r > wowgh || r < 0) {
+        //       y = -y;
+        //     } //不会原路返回关键
+        //     obj.offset({ left: l, top: r });
+        //     l += x;
+        //     r += y;
+        //   }, 10);
+        // });
+      });
+      // 移动元素
+      $(function () {
+        // var i = 0;
+        // $('.btn1').click(function(){
+        //   $('.p2').append($('.p1>p').eq(i));
+        // })
+        // $('.btn2').click(function(){
+        //   $('.p1').prepend($('.p2>p').last());
+        // })
+      });
+      //隐藏动画案例
+      $(function () {
+        // $(".btn1").click(function () {
+        //   $("div>img")
+        //     .last()
+        //     .hide(1000, function () {
+        //       //arguments.callee将前面函数当参数传递（相当于递归）
+        //       $(this).prev().hide(1000, arguments.callee);
+        //       //arguments.callee = $(this).prev().hide(1000, function(){
+        //       //  $(this).prev().hide(1000)
+        //       //})
+        //     });
+        // });
+        // $(".btn2").click(function () {
+        //   $("div>img")
+        //     .first()
+        //     .show(1000, function () {
+        //       $(this).next().show(1000, arguments.callee);
+        //     });
+        // });
+      });
+      //下拉菜单
+      $(function () {
+        $(".wrapper>ul>li");
+        //   .mouseover(function () {
+        //     //.stop取消多次动画
+        //     $(this).children("ul").stop().slideDown(500);
+        //   })
+        //   .mouseout(function () {
+        //     $(this).children("ul").stop().slideUp(500);
+        //   });
+      });
+    </script>
+  </head>
+  <body>
+    <input type="button" value="添加" class="creat" />
+    <!-- 动态添加表格数据 -->
+    <!-- <div class="wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>课程名称</th>
+            <th>知识</th>
+          </tr>
+        </thead>
+        <tbody class="t-tb">
+          <tr>
+            <td>Javascript</td>
+            <td><a href="#" class="get">GET</a></td>
+          </tr>
+          <tr>
+            <td>node</td>
+            <td><a href="#" class="get">GET</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mask"></div>
+    <div class="input">
+      <div class="line1">
+        <span>添加数据</span>
+        <div class="btnx">x</div>
+      </div>
+      <div class="line2">
+        课程名称：<input
+          type="text"
+          placeholder="请输入课程名称"
+          class="textadd"
+        />
+      </div>
+      <div class="line3">
+        <input type="button" value="添加" class="add" />
+      </div>
+    </div> -->
+    <!-- 可编辑表格 -->
+    <!-- <table>
+      <tr>
+        <td>123</td>
+        <td>123</td>
+      </tr>
+      <tr>
+        <td>123</td>
+        <td>123</td>
+      </tr>
+    </table> -->
+    <!-- 移动元素 -->
+    <!-- <div class="wrapper">
+      <div class="p1">
+          <p>123</p>
+          <p>456</p>
+          <p>789</p>
+          <p>789</p>
+        </ul>
+      </div>
+      <div class="input">
+        <input type="button" value=">" class="btn1">
+        <input type="button" value="<" class="btn2">
+        <input type="button" value=">>" class="btn3">
+        <input type="button" value="<<" class="btn4">
+      </div>
+      <div class="p2"></div>
+    </div> -->
+    <!-- //隐藏动画案例 -->
+    <!-- <input type="button" value="隐藏" class="btn1" />
+    <input type="button" value="显示" class="btn2" />
+    <div>
+      <img src="img/1.jpg" alt="" />
+      <img src="img/2.jpg" alt="" />
+      <img src="img/3.jpg" alt="" />
+      <img src="img/4.jpg" alt="" />
+      <img src="img/5.jpg" alt="" />
+      <img src="img/6.jpg" alt="" />
+    </div> -->
+    <!-- 下拉菜单 -->
+    <!-- <div class="wrapper">
+      <ul>
+        <li>
+          <span>学科</span>
+          <ul>
+            <li>111</li>
+            <li>111</li>
+            <li>111</li>
+          </ul>
+        </li>
+        <li>
+          <span>学科</span>
+          <ul>
+            <li>111</li>
+            <li>111</li>
+            <li>111</li>
+          </ul>
+        </li>
+      </ul>
+    </div> -->
+  </body>
+</html>

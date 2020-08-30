@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" manifest="demo.appcache">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 信息表 */
+      /* fieldset {
+        width: 400px;
+        margin: 0 auto;
+      }
+      fieldset > .score {
+        font-size: 16px;
+        line-height: 40px;
+        border: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      fieldset > .score,
+      .level {
+        width: 100%;
+        height: 40px;
+      } */
+    </style>
+    <script>
+      window.onload = function () {
+        // 信息表
+        // document.getElementsByClassName("score")[0].oninput = function () {
+        //   document.getElementsByClassName("level")[0].value = this.value;
+        // };
+        // 元素全屏显示
+        // document.querySelector(".btnfull").onclick = function () {
+        //   console.log("div");
+        //   var div = document.querySelector("div");
+        //   div.webkitRequestFullScreen();
+        // };
+      };
+    </script>
+  </head>
+  <body>
+    <!-- 文件即时（onchange）预览 -->
+    <!-- <form action="">
+      <input type="file" multiple onchange="getFile();" name="fileshow" /><br />
+      <input type="submit" />
+      <img src="" alt="" />
+    </form> -->
+    <script>
+      // 文件即时（onchange）预览
+      function getFile() {
+        // var filereader = new FileReader();
+        // var filename = document.querySelector("input").files;
+        // var img = document.querySelector("img");
+        // filereader.readAsDataURL(filename[0]);
+        // filereader.onload = function () {
+        //   console.log(filereader.result);
+        //   img.src = filereader.result;
+        // };
+      }
+    </script>
+    <!-- 信息表 -->
+    <!-- <form action="">
+      <fieldset>
+        <legend>信息</legend>
+        <input type="number" class="score" max="100" min="0" value="0" />
+        <meter class="level" max="100" min="0" low="60" high="90"></meter>
+      </fieldset>
+    </form> -->
+    <!-- 元素全屏显示 -->
+    <!-- <div style="background-color: aqua; width: 100px; height: 100px;"></div>
+    <input type="button" value="11" class="btnfull" /> -->
+  </body>
+</html>

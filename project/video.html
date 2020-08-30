@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="js/jquery-1.11.3.js"></script>
+    <style>
+      .player {
+        width: 500px;
+        height: auto;
+        margin: 0 auto;
+      }
+      video {
+        width: 100%;
+        display: none;
+      }
+      .wrapper {
+        width: 100%;
+        height: 30px;
+        margin-top: 0px;
+        background-color: black;
+      }
+      .wrapper .btn-left {
+        width: 30px;
+        height: 100%;
+        float: left;
+      }
+      .playerStart {
+        background-color: aqua;
+      }
+      .playerStop {
+        background-color: orangered;
+      }
+      .wrapper .btn-left::after {
+        content: "";
+        display: inline-block;
+        overflow: hidden;
+      }
+      .wrapper .btn-right {
+        width: 30px;
+        height: 100%;
+        background-color: aqua;
+        float: right;
+      }
+      .wrapper .time {
+        color: white;
+        font-size: 14px;
+        line-height: 30px;
+        width: 150px;
+        margin-left: 10px;
+        float: left;
+      }
+      .wrapper .progress {
+        width: 55%;
+        height: 50%;
+        margin-left: 5px;
+        margin-top: 7px;
+        position: relative;
+        border-radius: 4px;
+        background-color: #ccc;
+        float: left;
+      }
+      .wrapper .progress .start {
+        width: 0%;
+        height: 100%;
+        border-radius: 4px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: white;
+        z-index: 10;
+      }
+      .wrapper .progress .bar {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        border-radius: 4px;
+        opacity: 0;
+        z-index: 666;
+      }
+    </style>
+    <script>
+      $(function () {
+        var video = $("video")[0];
+        // 1.实现播放与暂停
+        $(".btn-left").click(function () {
+          //（暂停-播放；播放-暂停）
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
+          }
+          //播放与暂停按钮样式切换
+          $(this).toggleClass("playerStop playerStart");
+        });
+        // 2.全屏操作，要进行能力测试（不同浏览器加不同前缀）
+        $(".btn-right").click(function () {
+          // 难得写能力测试，理解
+          video.webkitRequestFullScreen();
+        });
+        // 3.实现播放，视频可以播放时触发
+        video.oncanplay = function () {
+          setTimeout(function () {
+            // 展示播放视频
+            video.style.display = "block";
+            // 展示总时长
+            // 通过duration获取时间（以秒为单位且有小数）
+            var total = video.duration;
+            var result = getTime(total);
+            $(".totalTime").html(result);
+          }, 2000);
+        };
+        // 得到时间数据并返回标准展示数据
+        function getTime(time) {
+          var hour = Math.floor(time / 3600);
+          hour = hour < 10 ? "0" + hour : hour;
+          var min = Math.floor((time % 3600) / 60);
+          min = min < 10 ? "0" + min : min;
+          var sec = Math.floor(time % 60);
+          sec = sec < 10 ? "0" + sec : sec;
+          return hour + ":" + min + ":" + sec;
+        }
+        // 4.视频播放时触发ontimeupdate事件,修改currentTime值也会触发这个事件
+        video.ontimeupdate = function () {
+          // currentTime获取当前播放时间
+          var playtime = video.currentTime;
+          var result = getTime(playtime);
+          $(".playTime").html(result);
+          // 设置进度条样式  0.12*100+% = 12%
+          var percent = (playtime / video.duration) * 100 + "%";
+          $(".start").css("width", percent);
+        };
+        // 5.视频跳播业务
+        $(".bar").click(function (e) {
+          // 获取鼠标点击距离
+          var offset = e.offsetX;
+          // 计算位置相对于父元素的比例
+          var percent = offset / $(this).width();
+          // 比例乘以总时长得现时长
+          var time = percent * video.duration;
+          // 设置currentTime
+          video.currentTime = time;
+        });
+        // 6.播放完毕重置状态
+        video.onended = function () {
+          video.currentTime = 0;
+          $(".btn-left").removeClass(".playStart").addClass(".playStop");
+        };
+      });
+    </script>
+  </head>
+  <body>
+    <div class="player">
+      <video src="mp4/38.mp4"></video>
+      <div class="wrapper">
+        <div class="btn-left playerStop"></div>
+        <div class="progress">
+          <div class="bar"></div>
+          <div class="load"></div>
+          <div class="start"></div>
+        </div>
+        <div class="time">
+          <span class="playTime">00.00.00</span>
+          \
+          <span class="totalTime">00.00.00</span>
+        </div>
+        <div class="btn-right"></div>
+      </div>
+    </div>
+  </body>
+</html>

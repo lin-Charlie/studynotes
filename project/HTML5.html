@@ -1,0 +1,238 @@
+<!-- 少用全局变量 -->
+<!DOCTYPE html>
+<html lang="en" manifest="demo.appcache">
+  <!--缓存文件 -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #myForm {
+        /* 居中 */
+        margin: 0 auto;
+        /* 解决 border-radius内陷*/
+        border: none;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        /* width=内容+padding+border */
+        box-sizing: border-box;
+      }
+    </style>
+    <script>
+      //新标签
+      // <header></header>//<div class="header">
+      //     <nav></nav>
+      // <footer></footer>//<div class="footer">
+      //   表单新增的type属性
+      // email URL Number: 默认验证，会阻止提交
+      // search 输入框（更人性化）
+      // range
+      // ----------------------------------------------------------
+      //oninput:监听当前元素内容改变，只要改变就触发这个事件（新增）
+      document.getElementById("key").oninput = function () {};
+      //onkeyup：键盘弹起的时候触发，每一个键都会触发
+      document.getElementById("key").onkeyup = function () {};
+      //oninvalid：验证不通过时触发（新增）
+      document.getElementById("key").oninvalid = function () {};
+      // -------------------------------------------------------------
+      // 获取单个元素，如有多个就只返回符合标准的第一个
+      // 类及id选择器和css一样
+      // querySelectorAll('')[0]获取所有元素
+      var tag = document.querySelector("");
+      // ---------------------------------------------------------------
+      window.onload = function () {
+        // add添加样式，一次只能添加一个
+        document.querySelector("li").classList.add("red");
+        // remove移除样式，一次只能移除一个
+        document.querySelector("li").classList.remove("red");
+        // toggle切换样式，有就删除没有就添加
+        document.querySelector("li").classList.toggle("res");
+        // 判断是否有样式（true/false）
+        document.querySelector("li").classList.contains("red");
+      };
+    </script>
+  </head>
+  <body>
+    <!-- 解决兼容问题 -->
+    <script src="html5shiv.min.js"></script>
+    // ---------------------------------------------------------------
+    <!-- form提交最好加name属性 -->
+    <form action="" id="myForm">
+      <input type="text" name="" id="key" />
+      <!-- autocomplete:自动完成 前提：1.已经提交过 2.元素必有name属性 -->
+      <input type="text" placeholder="请输入" autofocus autocomplete="on" />
+      <!-- tel:不会验证，只是移动端弹出数字键盘 -->
+      <!-- require：必须输入 -->
+      <!-- pattern：正则表达式验证 -->
+      <input type="tel" required pattern="^(\+86)?1\d{10}$" />
+      <!-- 选择文件 -->
+      <!-- multiple：选择多个(email中可以输入多个邮箱以“，”隔开) -->
+      <input type="file" multiple />
+    </form>
+    <!-- form:可以将未包含在form里的元素根据id也提交 -->
+    <input type="text" form="myForm" />
+    //---------------------------------------------------------------------
+    <!-- 只能选择，不可以输入 -->
+    <br />
+    <select name="" id="">
+      <option value=""></option>
+      <option value=""></option>
+    </select>
+    <!-- 可以选择，可以输入 -->
+    <!-- list：与datalist建立关联，datalist的id -->
+    <br />
+    <input type="text" list="sel" />
+    <datalist id="sel">
+      <option value="aaa"></option>
+      <option value="bbb"></option>
+    </datalist>
+    //----------------------------------------------------------
+    <!-- 进度条 -->
+    <progress max="100" value="50"></progress>
+    <!-- 度量器：衡量当前进度 -->
+    <!-- high：规定较高的值 -->
+    <!-- low：规定较低的值 -->
+    <meter max="100" low="30"></meter>
+    //----------------------------------------------------------
+    <!-- audio：音频
+    controls：控制面板
+    autoplay：自动播放
+    loop：循环-->
+    <audio src="" controls></audio>
+    <!-- video:音频
+    controls：控制面板
+    autoplay：自动播放
+    loop：循环
+    width，height：宽高  一般只设置宽或高让其自动等比缩放，同时设置不会完全符合，除非值是等比例的
+    poster：视频还没下载或用户还未点击时默认显示的封面。默认显示当前视频第一帧-->
+    <video src=""></video>
+    <!-- source的使用：不同浏览器支持的视频格式不一样，在添加时可以准备多个格式，让浏览器自行选择 -->
+    <video controls>
+      <source src="视频1" type="video/flv" />
+      <source src="视频2" type="video/mp4" />
+      你的浏览器不支持当前视频播放
+    </video>
+    //-------------------------------------------------------------
+    <!-- 自定义属性
+    1.（data-）开头
+  名称应该小写，不有特殊符号，不要纯数字 -->
+    <p data-school-name="24"></p>
+    <script>
+      // 取值
+      var p = document.querySelector("p");
+      var data = p.dataset["schoolName"]; //(schoolname=data-schoolname)
+      //-----------------------------------------------------------------
+      // ononline网络连通时触发事件，offline断开触发
+      window.addEventListener("ononline", function () {});
+      window.addEventListener("offline", function () {});
+      //--------------------------------------------------------------
+      // 全屏方法
+      var div = document.querySelector("div");
+      // requestFullScreen()开启全屏显示
+      // 不同浏览器要添加不同前缀（Chrome：webkit Firefox：moz opera：o IE：ms）
+      div.webkitRequestFullScreen();
+      // cancelFullScreen()取消 文档取消非DOM元素
+      document.webkitCancelFullScreen();
+      // fullscreenElement：是否全屏
+      document.fullscreenElement;
+      //-------------------------------------------------------------------------
+      // FileReader读取文件内容(new FileReader)
+      function getFile() {
+        var reader = new FileReader();
+        // readAsDataURL();读取文件获得一段以data-开头的字符串。字符串本质是DataURL
+        // DataURL是将资源转换为base64编码的字符串形式，并将内容直接存储在URL中。优化网站加载
+        var file = document.querySelector(".inputfile").files;
+        // readAsDataURL()没有返回值，结果存储在读取对象的result中（读取完成之后才可以取）
+        // 要传递一个参数blob（binary large object）：文件（图片或可以嵌入文档的类型）
+        reader.readAsDataURL(file[0]);
+        // FileReader有完整的事件模型来捕获读取文件状态
+        // onabort:读取文件中断时触发
+        // onerror:错误触发
+        // onload:成功触发
+        // onloadend:完成触发不管成功与否
+        // onloadstart:开始触发
+        // onprogress:过程触发
+        FileReader.onload = function () {
+          reader.result;
+        };
+      }
+      // readAsText():读取文本文件返回文本字符串（UTF-8）
+      // readAsBinaryString():读取任意类型文件，返回二进制字符串一般是存储文件，传给后台
+    </script>
+    //----------------------------------------------------------
+    <!-- h5元素要拖拽就必须添加 draggable="true"-->
+    <p draggable="true"></p>
+    <script>
+      var p = document.getElementsByTagName("p")[0];
+      // ondragend:拖拽结束触发
+      // ondragleave：离开元素触发（被拖拽元素）
+      // ondragstart；开始触发
+      p.ondrag = function () {};
+      // 应用目标元素
+      // ondragenter ：当拖拽元素进入目标元素触发
+      // ondragover 停留在目标元素触发  添加e.preventDefault()
+      // ondrop 在目标元素上松开鼠标触发（浏览器默认阻止触发，需要e.preventDefault()阻止默认行为）
+      // ondragleave 离开触发
+      //---------------------------------------------------------------
+      document.ondragstart = function (e) {
+        // 通过事件捕获来获得被拖拽的元素(e.target)
+        /*利用dataTransfer实现数据的存储和获取
+        setData(format,data)
+        format:数据类型（text/html text/uri-list）
+        data:一般字符串值*/
+        e.dataTransfer.setData("text/html", e.target.id);
+        // target：目标元素
+      };
+      document.ondrop = function (e) {
+        // 通过e.dataTransfer.setData存储的数据只能在drop事件中获取
+        var id = e.dataTransfer.getData("text/html");
+        e.target.appendChild(document.getElementById(id));
+      };
+      //-----------------------------------------------------------------
+      function getPosition() {
+        // 浏览器获取不了地理位置，只能使用第三方地理位置接口
+        if (navigator.geolocation) {
+          // getCurrentPosition:第一个参数-成功后调用函数
+          // 第二个：失败后调用函数
+          // 第三个：获取当前位置信息的方式
+          navigator.geolocation.getCurrentPosition(
+            function () {},
+            function () {},
+            Option
+          );
+        }
+      }
+      //--------------------------------------------------------------
+      // sessionStorage:数据存储到本地。5mb左右
+      // 数据只在本页面，关闭页面自动清除
+      // setItem(key,value),以键值对方式存储
+      // getItem(key):如果没有value则返回null removeItem(key) clear();清空所有数据
+      var name = document.querySelector("#usename").value;
+      window.sessionStorage.setItem("userName", name);
+      // localStorage:20mb 方法和sessionStorage一样
+      // 不同浏览器不共享，关闭页面和浏览器数据依然存在（存在硬盘）
+      var name = document.querySelector("#usename").value;
+      window.localStorage.setItem("userName", name);
+    </script>
+    <input type="text" id="username" />
+    //----------------------------------------------------------
+    <!-- 属性选择器 1.标签名[属性名] div[style]{}
+    2.div[class=red]{}查找指定属性且有指定值得div标签（严格匹配）
+    3.div[class*=red]{}查找指定属性且含有指定值得div标签
+    [class^] 以..开头的  $(结束)-->
+    <div style="width: 0%;"></div>
+    <div class="red"></div>
+    <div class="hhhred"></div>
+    //----------------------------------------------------------
+    <!-- 兄弟伪类
+    +（.first + li{}）：查找first标签相邻的li元素
+    ~(.fisrt ~ li{}):查找first标签所有兄弟li元素 -->
+    /*==========================================================*/
+    <!-- 获取标签所有样式 
+        对象。classlist
+        添加类样式：对象.classlist.add('样式名')
+        移除：对象.classlist.remove('样式名')
+        是否包含：对象.classlist.contains('样式名')
+        切换类样式：对象.classlist.toggle('样式名')-->
+  </body>
+</html>

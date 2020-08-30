@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        box-shadow: 10px 10px 5px 0px #ccc inset;
+        /* 四面都要阴影 */
+        box-shadow: 10px 10px 5px 0px #ccc inset，-10px -10px 5px 0px #ccc inset;
+      }
+
+      /* 相对父元素的结构伪类，不限制类型（不常用）
+      查找li的父元素的第一个li元素
+      1.相对于当前元素的父元素
+      2.查找类型必须是指定类型 */
+      li:first-child {
+        color: red;
+      }
+      /* 1.相对于当前元素的父元素
+         2.查找是只找符合类型的元素，过滤其他类型元素 */
+      li:first-of-type {
+        color: aqua;
+      }
+      /* 指定索引位置nth-child(索引位从1开始) ，可填值（索引||关键字||表达式）
+      even：偶数 odd：奇数*/
+      li:nth-child(4) {
+        color: #ccc;
+      }
+      /* 限制元素类型为li ，取索引为偶数的元素*/
+      li:nth-of-type(even) {
+        color: blue;
+      }
+      /* 取前5个元素，只能从头或尾开始的范围，中间无法取范围
+      n从0~li长度（5,4,3.。1）且n<=0时选取无效 */
+      li:nth-of-type(-n + 5) {
+        font-size: 16px;
+      }
+      /* target：为锚点目标元素添加样式 */
+      /* 锚链接：<a href="id/class名"></a>可以跳转到指定id/class名的元素位置 */
+      h2:target {
+        color: rebeccapurple;
+      }
+      /* ---------------------------------------------------------------- */
+      /* 交集选择器：只有同时添加.class和.name后div才有效果 */
+      .class.name div {
+        background-color: #fff;
+      }
+
+      /* 获取第一个字符：实现首字下沉 
+      p:::first-line 获取第一行，如果设置了first-letter则无法修改它*/
+      p::first-letter {
+        float: left;
+      }
+      /* 设置当前选中内容的样式 */
+      p::selection {
+        /* 只能改显示样式，无法修改内容样式 */
+        background-color: #fff;
+        /* hsl（30 100% 50%）颜色（0~360） 饱和度 亮度 
+        rgba（红，绿，蓝，透明度）添加了ahpone通道，不会影响其他元素透明度*/
+      }
+      /* --------------------------------------------------------------------------------- */
+      /* 默认width仅是内容宽度 真实宽=width+padding+border
+      css3 box-sizing盒模型
+      content-box:设置width仅是内容宽，最终width要加padding和border，页面容易错乱
+      border-box：设置width为最终宽度 ，包含了padding和border，稳固页面结构*/
+      div {
+        box-sizing: border-box;
+        /* 添加（/）在同一个角设置不同的半径值 水平/垂直 */
+        border-radius: 10px/5px;
+        /* 设置某个角 top-left-radius */
+        /* 设置不同角的不同半径值 */
+        border-top-left-radius: 10px 8px;
+        border-radius: 1px 2px 3px 4px/1px 3px 4px 5px;
+      }
+      /* ---------------------------------------------------------------------------- */
+      /* 颜色渐变 */
+      div {
+        /* 线性渐变颜色
+        linear-gradient(方向，开始颜色 位置，颜色2 位置，颜色3 位置)
+          方向：to top：0deg
+                to right：90deg
+                to bottom：180deg 默认
+                to left ：270deg*/
+        background: linear-gradient(to top, red, green);
+        /* 径向渐变（圆形）
+         radial-gradient(形状，大小，坐标)
+         形状：circle：正方形渐变色  ellipse：适配当前形状，正方形容器两者一样
+         如果宽高不一样默认ellipse
+         坐标：at 10px 10px（top left....）；默认正中心（改变圆心位置）
+         大小：closest-side（corner）：最近边（角），farthest-side（corner）远*/
+        background: radial-gradient(red, blue, green);
+        /* 设置颜色位置 */
+        background: radial-gradient(red, red 50%, blue 50%, blue);
+        /* 重复渐变，会不断重复所设置的样式 */
+        background: repeating-radial-gradient(
+          #fff 0%,
+          #fff 10%,
+          #000 10%,
+          #000 20%
+        );
+      }
+      /* -------------------------------------------------------------------------------- */
+      /* 背景样式 */
+      div {
+        /* 图片平铺
+        round：图片缩放平铺
+        space：不会缩放，只是产生图片间距
+        fixed:背景图片固定不变
+         scroll：图片会跟着滚动
+         loca与scroll：前提是滚动当前容器
+         local：背景图片会和内容一起滚动
+         scroll：不会*/
+        background-repeat: round;
+        background-attachment: fixed;
+        /* contain:自适应使图片全部包含在容器中（等比例，有空白）
+        cover： 图片填满整个容器（等比例，会溢出）*/
+        background-size: contain;
+        background-position: center;
+      }
+      /* ----------------------------------------------------------------- */
+      /* 提升移动端响应区域 */
+      div {
+        background-position: 0px 20px;
+        padding: 10px;
+        /* 设置背景坐标原点
+        border-box：从border开始填充背景
+        padding-box：从padding开始填充
+        conten-box：从content开始 */
+        background-origin: content-box;
+        /* 设置内容的裁剪
+        border-box：显示从border及以内的内容
+        padding-box：显示从padding及以内的内容
+        conten-box：显示从content及以内的内容 */
+        background-clip: content-box;
+      }
+      /* ----------------------------------------------------------------- */
+      /* 添加边框图片 */
+      div {
+        border: 20px solid rebeccapurple;
+        /* 指定边框图片，默认只填充容器四个角 */
+        border-image-source: url("img/1.jpg");
+        /* 设置四个方向上的裁切距离 fill：做内容的内部填充 */
+        border-image-slice: 30 fill;
+        /* 没设置宽度默认为原始边框宽度
+        1.边框图片本质是背景不会影响内容放置 */
+        border-image-width: 27px;
+        /* 图片平铺 repeat：直接平铺 round：缩放完整平铺  stretch:；拉伸*/
+        border-image-repeat: round;
+        /* border-image：source slice / width/ouset repeat */
+        border-image: url("img/1.jpg") 27 / 27px /0px round;
+      }
+      /* --------------------------------------------------------------- */
+      /* 过渡效果 */
+      div {
+        position: relative;
+        left: 100px;
+        background-color: #fff;
+        /* 过渡效果完成之后会恢复到原始状态 */
+        /* transition-timing-function: linear;时间函数-控制速度 */
+        /* transition: 属性名称 过渡时间 时间函数 延迟; */
+        transition: left 2s linear 0s;
+        /* 为多个属性添加过渡 */
+        transition: left 2s linear 0s, background-color 2s linear 0s;
+      }
+      /* 单击 */
+      div:active {
+        left: 1000px;
+      }
+      /* ----------------------------------------------------------------- */
+      /* 转换 transform 效果完成之后会恢复到原始状态
+      transform-style:preserve-3d 保留3d变换效果*/
+      div {
+        /* translate() 移动参照元素左上角 一个参代表x方向，两个为x/y方向 
+        需要指定方向则加后缀 X/Y
+        scale():缩放 一个参代表x和y方向相同缩放，两个为x/y方向不同缩放
+        rotate():旋转 deg（度）
+        skew():斜切 角度为正则按当前轴的负方向切，反之相反
+        1个参为水平方向,2个参则先水平后垂直切*/
+        transform: translate(100px, 200px);
+        transform: skew(30deg, -30deg);
+        /* 改变旋转轴心 */
+        transform-origin: left top;
+        /* 同时移动旋转
+        需先添加移动在添加旋转，反之则会使坐标系旋转 */
+        transform: translateX(100px) rotate(30deg);
+        /* 清除样式 */
+        transform: none;
+        /* 垂直水平居中 translate()百分比参照的是元素本身 */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        /* -------------------------------------------------------------------- */
+        /* 3d移动 */
+        /*translate3d(x,y,z)：移动，必须三个值
+        scale3d(num1,num2,num3):缩放(1不变)
+        rotate3d(x,y,z,angle):旋转 
+        x:代表x轴上的向量值。y:代表y轴上的向量值。z:代表z轴上的向量值*/
+
+        /* 透视/景深 */
+        /* 景深效果；从立方体内部看 设置观察距离
+        perspective-orgin:0px 0px :设置观察角度*/
+        perspective: 0px;
+      }
+      /* ----------------------------------------------------------------- */
+      /* 动画效果 */
+      div {
+        /* animation-name: 指定动画名称 */
+        animation-name: move;
+        /* 1.设置动画总耗时 */
+        animation-duration: 2s;
+        /* 2.设置动画次数 infinite:无限次*/
+        animation-iteration-count: infinite;
+        /* 3.设置交替动画  开始-结束-开始*/
+        animation-direction: alternate;
+        /* 4.动画延迟 animation-delay*/
+        /* 5.设置动画结束时状态 默认动画结束后会恢复原始状态
+        forwards:保留动画结束时状态
+        backwards:不会保留，添加延时的前提下，有初始状态会立刻进入初始状态
+        both：都有*/
+        animation-fill-mode: both;
+        /* 6.设置时间函数 */
+        animation-timing-function: linear;
+        /* 7.设置播放状态 */
+        animation-play-state: running;
+      }
+      /* 创建动画 */
+      @keyframes move {
+        /* 百分比指整个动画耗时的百分比 */
+        0% /*(from)*/ {
+          transform: translate();
+        }
+        100% /*(to)*/ {
+          transform: translate();
+        }
+      }
+      /* -------------------------------------------------------------------- */
+      /* 自定义web字体和字体图标 */
+      /* 创建自定义字体 */
+      @font-face {
+        font-family: "kaiti";
+        src: url() format(), url() format();
+        /* src:<source> [<format>] [,<source> [<format>]] *;
+          [font-weight:<weight>];
+          [font-style:<style>]; 
+          <Soure>：指定的是自定义的字体存放路径
+　　      <Format>：指定的是自定义的字体格式，主要用来帮助浏览器识别，其值主要有
+      以下几种类型，如trutype,opentype,truetype-att,embedded-opentype,avg等。
+　　      <font-weifht和font-style>：前者用来指定字体是否为粗体，后者主要定义字体样式。*/
+      }
+      /* 创建样式使用自定义字体 */
+      .web-font {
+        font-family: kaiti;
+      }
+      /* 字体图标创建与字体创建类似仅使用方式不同*/
+      .smaile::before {
+        /* 下载文件中的Unicode编码 */
+        content: "/e641";
+      }
+      /* ----------------------------------------------------------------- */
+      /* 多列布局 文本显示 类似新闻报纸的排版*/
+      div {
+        /* 列数 */
+        column-count: 3;
+        /* 间隙样式，与border一样 */
+        column-rule: dashed 3px red;
+        /* 间隙大小 */
+        column-gap: 30px;
+        /* 设置列宽 原则：取大优先
+        如果设置宽比默认值大则取设置值，反之则取默认值 */
+        column-width: 300px;
+        /* 跨列显示 1/all */
+        column-span: all;
+      }
+      /* -------------------------------------------------------------- */
+      /* 伸缩布局 */
+      div {
+        /* 设置父容器为伸缩盒子 ：会使每一个子元素自动变成伸缩项
+        子元素宽度大于父元素时会自动平均收缩*/
+        display: flex;
+        /* 设置子元素在主轴上的排列方式
+        flex-start： 从父元素起始位置放置 左
+        flex-end：从父元素结束位置放置 右
+        center：
+        space-between：左右对齐父元素，中间平均分页，产生相同间距
+        space-around：将多余空间平均分在每一个子元素的两边,中间盒子间距是两边的两倍*/
+        justify-content: space-around;
+        /* flex-flow：是flex-wrap和flex-direction的综合 
+        flex-wrap：控制子元素是否换行，默认不换
+        nowrap：不换 wrap：换 wrap-reverse：翻转，从下往上排列
+        flex-direction：设置子元素的主轴方向，默认主轴为(row)水平方向，侧轴为垂直
+*/
+        flex-flow: row wrap;
+        /* column:垂直是主轴，水平是侧轴 
+        column-reverse：从下到上*/
+        flex-direction: column;
+        /* flex-grow:扩展子元素宽度，设置当前元素占据剩余空间的比例值 
+        前提必须在子元素中设置 默认值0为不占据剩余空间
+        flex-shrink:收缩比例 默认值1为收缩（不够空间的比例）
+        flex：number flex-grow和flex-shrink简写 设置当前项所占比例*/
+        flex-grow: 1;
+        /* align-items:设置子元素在侧轴上排列方向
+        center:居中 flex-start：顶对齐 flex-end：底对齐 
+        stretch：拉伸，充满整个侧轴 baseline：文本基线对齐*/
+        align-items: center;
+        /* align-self：单个元素在侧轴上对齐方式 在子元素中设置*/
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 文本阴影：text-shadow:offsetX offsetY blur color -->
+    <!-- 边框阴影：box-shadow:h(水平) v(垂直) blur spread color inset
+    blur：模糊（可选） spread：阴影的尺寸 color：默认黑色 inset：内阴影 -->
+    <div></div>
+  </body>
+</html>

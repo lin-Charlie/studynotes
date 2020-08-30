@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+    <script>
+      /*node中的MVC
+      app.js 项目入口文件
+      M model.js：只提供数据处理
+      V
+      C router.js:只提供路由分配不负责业务逻辑处理
+        controller.js：只负责业务逻辑处理不负责数据处理
+      
+      
+      MVVM：相对于MVC提供了双向数据绑定机制
+        前端视图层被分为三个部分
+        M model：页面中要渲染的数据
+        V view：
+        VM viewmodel：是MVVM思想核心；是调度者，联系M和V层
+        他分割了M和V层，当M中数据变化会被自动渲染到页面上，
+        当页面数据被修改，也会同步到M中
+        */
+
+      /*==============================================================*/
+      window.onload = function () {
+        //这里new Vue()创建的实例vue就是MVVM中的VM，它提供了双向数据绑定的能力
+        var vue = new Vue({
+          //元素挂载位置（css 元素或 DOM 元素）element MVVM中的V
+          el: ".box",
+          data: {
+            //模型数据（值是一个对象） MVVM中的M
+            msg: "hello vue",
+            btntittle: "1111",
+          },
+        });
+      };
+      /*================================================================*/
+      /*================================================================*/
+      /*================================================================*/
+      /*================================================================*/
+    </script>
+  </head>
+  <body>
+    /*================================================================*/
+    <!-- 创建一个容器，使用vue可以控制指定容器中所有DOM元素 -->
+    <div class="box">
+      {{msg}}
+      <!-- v-text--指令 vue中所有指令都是属性且都是v-开头
+       {{}}语法(叫做插值表达式，可以写任何合法的JS表达式)
+       只能在内容区不能再属性中 -->
+      <h3 v-text="msg"></h3>
+      <!-- v-text和{{}}语法的区别
+        1.插值表达式存在数据闪烁问题
+        2.插值表达式只会插入内容不会清除，v-text会清空之前的所有内容-->
+    </div>
+
+
+    <!-- 插值表达式支持基本运算 
+    <style>
+        [v-cloak]{
+            display:none; 
+        } 解决数据闪烁-->
+    <div v-cloak>{{1+2}}</div>
+
+    <!-- 渲染内容中有HTML标签需要v-html实现 -->
+    <div v-html="msg"></div>
+
+    <!-- v-bind：绑定属性值(简写 :tittle)
+    如果想要拼接内容则被拼接的内容需要引号包裹 "btntittle+'111'" 
+    只能实现数据的单向绑定，从data到view-->
+    <input type="button" value="111" v-bind:tittle="btntittle" />
+
+    <!-- v-model实现数据双向绑定，其他指令都是单向的
+    只能应用在表单中 -->
+    <input type="text" name="" id="" v-model="msg" />
+
+    <!-- v-for循环遍历 涉及到v-for建议添加：key属性，
+      key只接受string/number且值具有唯一性-->
+    <!-- 循环对象数组 -->
+    <ul>
+      <li v-for="item in list">{{ item }}</li>
+      <!-- i--索引 -->
+      <li v-for="(item,i) in list" :key="item.id">{{ item.id }} {{ item.name }} {{ i }}</li>
+    </ul>
+
+    <!-- 循环对象中的属性 -->
+    <ul>
+      <li v-for="(val,key,i) in person">{{ val }} {{ key }}</li>
+    </ul>
+
+    <!-- 循环数字 -->
+    <ul>
+      <li v-for="(item,i) in 4">{{ item }} {{ i }}</li>
+    </ul>
+
+
+    <!-- v-if v-show根据指定标识符切换元素显示和隐藏状态 -->
+    <!-- v-if是实时创建和移除元素 有更高的切换消耗 运行条件不好时
+        v-show是添加样式 display=none 有更高的渲染消耗 频繁切换-->
+    <h2 v-if="flag">123456</h2>
+    <h2 v-show="flag">123456</h2>
+
+
+    <!-- var vm = new Vue({
+      el:"",
+      data:{
+        list:[{id:1,name:'zz'},{id:2,name:'zz'},{id:3,name:'zz'}],
+        person:{name:'zz',age:2,num:123},
+        flag:true
+      }
+    }) -->
+    
+    /*================================================================*/
+    <!-- vue提供v-on绑定事件 -->
+    <div class="btn">
+      <!-- 简写 @click -->
+      <input type="button" value="" v-on:click="add" />
+      <!-- 事件修饰符 -->
+      <!-- .stop：阻止事件冒泡 
+          .prevent: 阻止默认事件
+          .captrue:添加事件监听器使用事件捕获机制(事件捕获和冒泡只能存在一个)
+          .self:只在元素本身被触发是回调
+          .once:只触发一次-->
+      <input type="button" value="11" @click.stop="add" />
+      <!-- 键盘事件修饰符 -->
+      <input type="text" @keyup.enter="add">
+      <!-- //@keyup.end end建抬起时触发 -->
+      <h2>{{weight}}</h2>
+    </div>
+    <script>
+      var vue = new Vue({
+        el: ".btn",
+        data: {
+          weight: 12,
+        },
+        methods: {
+          //可以写多个事件处理函数
+          add() {
+            //定义函数属性简写
+            //method想要访问data中的数据需要用this--vue
+            this.weight += 3;
+            //当data中数据变化时，VM调度者会监听到，然后将新数据应用在页面上
+          },
+        },
+      });
+    </script>
+    /*================================================================*/
+    <!-- vue中使用类样式 -->
+    <!-- 1.使用v-bind绑定类样式 -->
+    <h2 :class="['red','size']">123456</h2>
+    <!-- 2.使用三元表达式判断是否添加样式 -->
+    <input type="button" value="11" @click="isthin=true" />
+    <h2 :class="['red',isthin ? 'thin':'']">123456</h2>
+    <!-- 3.使用对象简化三元表达式 -->
+    <input type="button" value="11" @click="isthin=true" />
+    <h2 :class="['red',{thin:isthin}]">123456</h2>
+    <!-- 4.传递对象添加类样式 -->
+    <h2 :class="{red:true,thin:true}">123456</h2>
+
+    <!-- 行内样式 -->
+    <h2 :style="{color:"red"}">123456</h2>
+    /*================================================================*/
+    <script>
+      // 创建全局过滤器
+      /*filter('过滤器被调用是的名称',过滤器的处理函数)
+      过滤器必须返回值，可以使用管道符调用多个过滤器
+      format--格式化
+      data：第一个形参是管道符前面一个值（不变的）
+      str:为过滤器传参，参数只能在第二形参位置接收
+      只能使用在插值表达式或v-bind中*/
+
+      Vue.filter('format',function(data,str){})
+      {{ msg | format(str) |addFor()}}//调用过滤器时要用|
+      
+      var vm =new Vue({
+        el:"",
+        data:{},
+        methods: {},
+        filters:{//私用过滤器
+          addFor(){},
+        }
+        //如果全局过滤器和私有过滤器重名则就近原则
+      })
+    </script>
+    /*================================================================*/
+    <!-- 自定义指令 -->
+    <script>
+      // 自定义指令名称不需要前缀，调用时要加
+      Vue.directive(id, {
+        // 元素样式操作写到bind中
+        bind:function(el){//第一个参数是el表示被绑定指令的元素
+        },//调用一次，当绑定到元素被Vue解析到就会立即执行bind函数
+
+        // 如果需要操作元素的JS行为最好写到inserted中
+        inserted:function(el){
+            el.focus()//想要获取焦点必须先插入到文档中才能生效
+        },//当指令绑定的元素被插入文档的父节点时候调用inserted函数
+      })
+
+      var vm = new Vue({
+        el:"",
+        data:{},
+        methods: {},
+        filters:{},
+        directives:{
+          color:{
+            bind(){},
+            inserted(){},
+          },
+          color:function(el,binding){
+            //指令函数简写，等同于将function中代码分别定义到bind和inserted中
+          }
+        }//私有自定义指令
+      })
+    </script>
+    /*================================================================*/
+    <script>
+    // 生命周期--从创建、运行、销毁期间总是伴随各种各样的事件，
+    // 这些事件的统称生命周期函数/生命周期钩子函数
+    // 三个阶段：创建、运行、销毁
+    var vm = new Vue({
+      el:"",
+      data:{},
+      methods: {},
+      beforeCreate() {
+        //第一个生命周期函数，执行时data和methods中的数据还没初始化
+      },
+      created() {
+        //第二个生命周期函数，data和methods中的数据初始化,可以引用数据了
+      },
+      beforeMount() {
+        // 创建阶段的第三个生命周期函数，表示页面即将挂载
+        //当模板页面编译好后，会立即执行这个函数，我们的HTML页面结构
+        //已经在内存中创建好了，但还未挂载，这个函数中，页面DOM元素是原始的
+        
+      },
+      mounted() {
+        // 创建阶段的第四个生命周期函数，表示页面完成渲染同时标志创建阶段结束
+      },
+      beforeUpdate() {
+        // 运行阶段，当数据被修改时触发 
+        // 更新之前，运行时页面还是旧的，此时的data是最新的
+      },
+      updated() {
+        //更新之后，页面和数据都是最新的
+      },
+      beforeDestroy() {
+        // vm实例还是正常可用，此时还没有开始销毁
+      },
+      destroyed() {
+        //vm已经不可用了
+      },
+    })
+    </script>
+    /*================================================================*/
+    <input type="button" value="GET" @click="getInfo">
+    <input type="button" value="POST" @click="postInfo">
+    <input type="button" value="JSONP" @click="jsonpInfo">
+    <script>
+      // 请求数据
+
+      /*使用axios请求数据(不支持jsonp--跨域)
+      跨域：不允许Ajax访问协议、域名、端口不同的数据接口
+
+      第一种根路径配置方法：
+      axios.defaults.baseURL ='http:/api.example.com'
+      第二种根路径配置方法：axios.create()方法，调用返回的是一个
+      新axios实例，调用时可以初始化一些配置，比如：baseURL地址
+      Vue.prototype.$http = axios.create(
+        {baseURL：'http:/api.example.com'}
+      )
+      第三：外部创建一个js文件
+      */
+      // 1.导入axios包(导入后不会自动给vm实例挂上$http方法)
+      // 2.把axios绑定到Vue构造函数的原型上(手动添加$http方法)
+      Vue.prototype.$http = axios
+
+      /*使用vue-resource请求数据*/
+      // 1.先导入vue-resource包(导入后会自动给vm实例挂上$http方法)
+      var vm = new Vue({
+        el:"",
+        data:{},
+        methods:{
+          //vue-resource是body
+          getInfo(){//get方式请求数据
+            //返回promise对象
+            this.$http.get('URL').then(successCallBack,errorCallBack)
+          },
+
+          async getInfo(){
+            // 结构赋值
+            const {body} = await this.$http.get('URL')
+            console.log(body)
+          },
+
+          async postInfo(){//post方式请求
+            // 结构赋值
+            const {body} = await this.$http.post('URL',{name:"",age:''})
+          },
+
+          async jsonpInfo(){//jsonp方式请求
+            // 结构赋值
+            const {body} = await this.$http.jsonp('URL')
+          },
+          /*===========================================*/
+          //axios是data
+          async getInfo(){
+            const {data} = await axios.get('URL')
+          }
+        }
+      })
+    </script>
+    /*================================================================*/
+    <!-- vue动画 -->
+    <!-- vue使用动画(需要添加transition标签) -->
+    <!-- 设置动画效果 -->
+    <style>
+      .v-enter,
+      .v-leave-to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      .v-enter-active,
+      .v-leave-active {
+        transition: all 0.5s ease;
+      }
+      /* 后续元素动画设置 */
+      .v-move{/*元素改变定位的时候应用 有一个缓动效果*/
+        transition:all 1s ease;
+      }
+      .v-leave-active{/*表示要被删除的元素脱离标准流，后面的元素就能浮上来*/
+        position: absolute;
+      }
+    </style>
+
+    <!-- 添加transition标签
+    name属性可以修改v-这个前缀，区分不同元素的过渡效果 -->
+    <transition name='xxx'>
+      <h3></h3>
+    </transition>
+
+    <!-- 引用第三方类样式animate.css -->
+    <link rel="stylesheet" href="css/animate.css">
+    <transition enter-active-class='fadeInDown' leave-active-class='fadeInDown'>
+      <h3 class="animated"></h3>
+    </transition>
+    
+    <!-- 列表过渡 
+      tag="ul"将标签解析为ul而非span(行级)标签，行级元素不能包裹块级元素(li)-->
+    <transition-group tag="ul">
+      <!-- transition-group子元素必须有key属性 -->
+    <li v-for="(item, index) in items" :key="index"></li>
+    </transition-group>
+
+    <script>
+      /*1.vue把动画分为入场和出场动画两个部分
+      2.入场动画：v-enter(进入之前,动画入场前状态)，
+      v-enter-to(进入之后，入场完成之后的状态)
+      3.v-enter-active表示入场动画的时间段，可以规定如：时间长短、动画效果*/
+      /*<transition 
+      v-on:before-enter='beforeEnter'开始动画之前的状态
+      v-on:enter='Enter'动画结束之后的结束状态
+      v-on:after-enter='afterEnter' 结束之后的回调函数，做一些清理工作>*/
+      var vm = new Vue({
+        el:'',
+        data:{data:false},
+        methods:{
+          beforeEnter(el){
+            el.style.transform='translate()'
+          },
+          Enter(el,done){
+            el.offsetxxx//固定写法，不然无法实现动画效果
+            el.style.transform = 'translate()'
+            el.style.transition =' all 0.5s ease'
+          },
+          afterEnter(el){
+            this.data = !this.data
+          }
+        }
+      })
+      //cursor:pointer 鼠标样式
+    </script>
+    /*================================================================*/
+    <script>
+      /*全局组件*/
+      var vm = new Vue({
+        el:"",
+        data:{},
+        methods:{},
+        filters:{},
+        directives:{},
+        components:{//定义实例中私有组件
+          'mycom3':{
+            template:'<p>私有组件</p>'
+          }
+        },
+        mounted() {//内存中渲染好的DOM树已经挂载到页面上了
+          /*网页中有一些第三方插件需要初始化
+          使用Jquery封装的框架分为：UI解构 JS代码
+          因此，一些第三方插件如果需要结合Vue使用，而且这个插件需要手动初始化JS逻辑
+          此时，必须放在mounted中，否则可能无法出现预期效果；
+          */
+        },
+      })
+
+      /*创建全局组件的第一种方式： component*/ 
+      const com1 = Vue.extend({
+        /*template属性中不能单独放一段文本必须标签包裹
+        想放多个元素那这些元素外必须有唯一的根元素包裹*/ 
+        template:'<p>1111<p>'//template属性表示这个组件的UI代码解构
+      })
+      // 2.Vue.component向全局注册一个组件
+      // Vue.component('组件名称', 组件构造函数) (组件名称大写要加连字符)
+      Vue.component('mycom1', com1)
+      /*3.直接将组件名称作为标签名加在页面即可
+        <mycom1></mycom1>*/
+
+      // 第二种：直接使用component第二个参数，即接受一个组件构造函数
+      Vue.component('id', {
+        template:'<p>1111<p>'
+      })
+
+      const comp2 = {
+        template:''
+      }
+      Vue.component('mycomp', comp2)
+      
+      /*第三种方式*/ 
+      Vue.component('id', {
+        template:"#id"
+      })
+      /*    
+      <!-- 定义template标签 Vue提供的template标签可以定义组件的UI模板解构-->
+      <template id="id">
+      <!-- div唯一根元素 多个标签时 -->
+      <div>
+        <h2>11223</h2>
+        <p>111</p>
+      </div>
+      </template>*/
+
+      // 组件内部数据
+      Vue.component('mycom4', {
+        template:"<p @click='show'>hhhh:{{msg}}</p>",
+        data:function(){//组件中允许有自己的私有数据单data必须是一个function
+        // 且要return一个对象
+                return {
+                  msg:"hahahha"
+                }
+             },
+        methods: {
+          show(){
+            console.log('私有方法show')
+          }
+        },
+      })
+    </script>
+
+    /*================================================================*/
+    /*================================================================*/
+    /*================================================================*/
+    /*================================================================*/
+    /*================================================================*/
+    /*================================================================*/
+
+  </body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        text-decoration: none;
+        color: black;
+      }
+      /* 安卓机器人 */
+      /* .content {
+        width: 500px;
+        height: 700px;
+        margin: 0px auto;
+        border: 1px solid red;
+      }
+      .head {
+        width: 250px;
+        height: 125px;
+        margin: 20px auto;
+        background-color: green;
+        border-radius: 125px 125px 0px 0px;
+        position: relative;
+      }
+      .head::before,
+      .head::after {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background-color: white;
+        position: absolute;
+        top: 50%;
+        margin-top: -10px;
+      }
+      .head::before {
+        left: 70px;
+      }
+      .head::after {
+        right: 70px;
+      }
+      .body {
+        width: 250px;
+        height: 250px;
+        background-color: green;
+        margin: 0px auto;
+        position: relative;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+      }
+      .body::before,
+      .body::after {
+        content: "";
+        display: block;
+        width: 30px;
+        height: 180px;
+        border-radius: 15px;
+        background-color: green;
+        position: absolute;
+        top: 30px;
+      }
+      .body::before {
+        left: -40px;
+      }
+      .body::after {
+        right: -40px;
+      } */
+      /* 边框图片和渐变 */
+      /* .color {
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(to top, red, green);
+        background: repeating-radial-gradient(
+          #fff 0%,
+          #fff 10%,
+          #000 10%,
+          #000 20%
+        );
+      } 
+      .qipao {
+        width: 300px;
+        height: auto;
+        padding: 10px;
+        border: 1px solid red;
+        border-image: url("img/3.jpg");
+        border-image-width: 10px;
+        border-image-slice: 20 fill;
+      }*/
+      /* 手风琴菜单 */
+      /* .nav1 {
+        width: 200px;
+        height: auto;
+        overflow: hidden;
+      }
+      .nav1 > h3 {
+        display: inline-block;
+        width: 200px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        color: orange;
+        background-color: aqua;
+      }
+      .nav1 > .news {
+        width: 100%;
+        height: 0px;
+        background-color: yellow;
+        text-align: center;
+        transition: height 0.5s linear 0s;
+      }
+      .nav1:hover > .news {
+        height: 100px;
+      }
+      .nav1 > .news ul {
+        padding: 10px;
+      } */
+      /* 图片旋转 */
+      /* .pic {
+        width: 300px;
+        height: 181px;
+        margin: 400px auto;
+        position: relative;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        transition: transform 1s;
+        transform-origin: left top;
+      }
+      .pic:hover > img:nth-of-type(1) {
+        transform: rotate(-60deg);
+      }
+      .pic:hover > img:nth-of-type(2) {
+        transform: rotate(-120deg);
+      }
+      .pic:hover > img:nth-of-type(3) {
+        transform: rotate(-180deg);
+      }
+      .pic:hover > img:nth-of-type(4) {
+        transform: rotate(-240deg);
+      }
+      .pic:hover > img:nth-of-type(5) {
+        transform: rotate(-300deg);
+      }
+      .pic:hover > img:nth-of-type(6) {
+        transform: rotate(-360deg);
+      } */
+      /* 图片滚动 */
+      /* .pic {
+        width: 664px;
+        height: 150px;
+        margin: 20px auto;
+        overflow: hidden;
+      }
+      .pic ul {
+        width: 200%;
+        animation: move 3s linear infinite;
+      }
+      @keyframes move {
+        0% {
+          transform: translateX(0px);
+        }
+        100% {
+          transform: translateX(-663px);
+        }
+      }
+      .pic li {
+        float: left;
+        height: 100px;
+      }
+      .pic li > img {
+        height: 100%;
+      } */
+      /* 时钟 */
+      /* .clock {
+        margin: 100px auto;
+        width: 300px;
+        height: 300px;
+        border: 10px solid black;
+        border-radius: 50%;
+        position: relative;
+        z-index: 90;
+      }
+      .center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .clock .point {
+        width: 25px;
+        height: 25px;
+        background-color: black;
+        border-radius: 50%;
+        z-index: 999;
+      }
+      .clock .hour {
+        width: 13px;
+        height: 60px;
+        background-color: red;
+        transform: translate(-50%, -100%);
+        z-index: 996;
+        transform-origin: center bottom;
+        animation: clockAinmation 43200s linear infinite;
+      }
+      .clock .min {
+        width: 9px;
+        height: 80px;
+        background-color: blue;
+        transform: translate(-50%, -100%);
+        z-index: 996;
+        transform-origin: center bottom;
+        animation: clockAinmation 3600s linear infinite;
+      }
+      .clock .sec {
+        width: 4px;
+        height: 100px;
+        background-color: black;
+        transform: translate(-50%, -100%);
+        z-index: 996;
+        transform-origin: center bottom;
+        animation: clockAinmation 60s linear infinite;
+         steps(60)与 animation-timing-function其他属性冲突
+        animation-timing-function: steps(60);
+      }
+      @keyframes clockAinmation {
+        0% {
+          transform: translate(-50%, -100%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -100%) rotate(360deg);
+        }
+      }
+      .clock .cover {
+        width: 240px;
+        height: 240px;
+        background-color: white;
+        border-radius: 50%;
+        z-index: 98;
+      }
+      .clock .num {
+        width: 10px;
+        height: 300px;
+        background-color: gray;
+        top: 0;
+        transform: translate(-50%, 0);
+        z-index: 60;
+      }
+      .clock .num1 {
+        transform: translate(-50%, 0) rotate(30deg);
+      }
+      .clock .num2 {
+        transform: translate(-50%, 0) rotate(60deg);
+      }
+      .clock .num3 {
+        transform: translate(-50%, 0) rotate(90deg);
+      }
+      .clock .num4 {
+        transform: translate(-50%, 0) rotate(120deg);
+      }
+      .clock .num5 {
+        transform: translate(-50%, 0) rotate(150deg);
+      } */
+      /* 携程网页 */
+      /* .web {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-flow: column;
+      }
+      .head {
+        width: 100%;
+        height: 150px;
+        display: flex;
+      }
+      .head > a {
+        flex: 1;
+      }
+      .head img {
+        width: 100%;
+        height: 100%;
+      }
+      .main {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-flow: column;
+        box-sizing: border-box;
+      }
+      .main > .session {
+        width: 100%;
+        height: 150px;
+        margin-top: 20px;
+        background-color: greenyellow;
+        border-radius: 4px;
+        display: flex;
+      }
+      .main > .session .left {
+        flex: 1;
+        border-right: 1px solid white;
+      }
+      .main > .session .right {
+        flex: 2;
+        display: flex;
+        flex-flow: wrap;
+      }
+      .main > .session .right a {
+        display: inline-block;
+        box-sizing: border-box;
+        color: white;
+        width: 50%;
+        font-size: 20px;
+        text-align: center;
+        line-height: 75px;
+        border-bottom: 1px solid white;
+        border-left: 1px solid white;
+      }
+      .main > .session .right a:nth-of-type(n + 3) {
+        border-bottom: none;
+      }
+      .main > .session3 {
+        height: 200px;
+        width: 100%;
+        background-color: #fff;
+        display: flex;
+      }
+      .main > .session3 > a {
+        flex: 1;
+      }
+      .main > .session3 img {
+        width: 100%;
+        height: 100%;
+      }
+      .bottom {
+        width: 100%;
+      }
+      .bottom > .nav {
+        width: 100%;
+        height: 30px;
+        display: flex;
+      }
+      .bottom > .nav a {
+        flex: 1;
+        text-align: center;
+      } */
+    </style>
+  </head>
+  <body>
+    <!-- 携程网页 -->
+    <!-- <div class="web">
+      <div class="head">
+        <a href="#"><img src="img/long.jpg" alt="" /></a>
+      </div>
+      <div class="main">
+        <div class="session">
+          <div class="left"></div>
+          <div class="right">
+            <a href="">酒店</a>
+            <a href="">飞机</a>
+            <a href="">火车</a>
+            <a href="">汽车</a>
+          </div>
+        </div>
+        <div class="session">
+          <div class="left"></div>
+          <div class="right">
+            <a href="">酒店</a>
+            <a href="">飞机</a>
+            <a href="">火车</a>
+            <a href="">汽车</a>
+          </div>
+        </div>
+        <div class="session session3">
+          <a href=""><img src="img/2.jpg" alt="" /></a>
+          <a href=""><img src="img/3.jpg" alt="" /></a>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="nav">
+          <a href="">联系我们</a>
+          <a href="">联系我们</a>
+          <a href="">联系我们</a>
+        </div>
+      </div>
+    </div> -->
+    <!-- 时钟 -->
+    <!-- <div class="clock">
+      <div class="cover center"></div>
+      <div class="hour center"></div>
+      <div class="min center"></div>
+      <div class="sec center"></div>
+      <div class="num1 num center"></div>
+      <div class="num2 num center"></div>
+      <div class="num3 num center"></div>
+      <div class="num4 num center"></div>
+      <div class="num5 num center"></div>
+      <div class="num center"></div>
+      <div class="point center"></div>
+    </div> -->
+    <!-- 图片滚动 -->
+    <!-- <div class="pic">
+      <ul>
+        <li><img src="img/1.jpg" /></li>
+        <li><img src="img/2.jpg" /></li>
+        <li><img src="img/3.jpg" /></li>
+        <li><img src="img/4.jpg" /></li>
+        <li><img src="img/1.jpg" /></li>
+        <li><img src="img/2.jpg" /></li>
+        <li><img src="img/3.jpg" /></li>
+        <li><img src="img/4.jpg" /></li>
+      </ul>
+    </div> -->
+    <!-- 图片旋转 -->
+    <!-- <div class="pic">
+      <img src="img/1.jpg" alt="" />
+      <img src="img/2.jpg" alt="" />
+      <img src="img/3.jpg" alt="" />
+      <img src="img/5.jpg" alt="" />
+      <img src="img/4.jpg" alt="" />
+      <img src="img/6.jpg" alt="" />
+    </div> -->
+    <!-- 手风琴菜单 -->
+    <!-- <div class="nav1">
+      <h3>xlll</h3>
+      <div class="news">
+        <ul>
+          <li>112</li>
+          <li>112</li>
+          <li>112</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav1">
+      <h3>xlll</h3>
+      <div class="news">
+        <ul>
+          <li>112</li>
+          <li>112</li>
+          <li>112</li>
+        </ul>
+      </div>
+    </div> -->
+    <!-- 边框图片 -->
+    <!-- <div class="qipao">
+      图片平铺 repeat：直接平铺 round：缩放完整平铺 stretch:；拉伸 图片平铺
+      repeat：直接平铺 round：缩放完整平铺 stretch:；拉伸 图片平铺
+      repeat：直接平铺 round：缩放完整平铺 stretch:；拉伸 图片平铺
+      repeat：直接平铺 round：缩放完整平铺 stretch:；拉伸 图片平铺
+    </div>
+    <div class="color"></div> -->
+    <!-- 安卓机器人 -->
+    <!-- <div class="content">
+      <div class="head"></div>
+      <div class="body"></div>
+    </div> -->
+  </body>
+</html>

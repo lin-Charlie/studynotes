@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      /* var的弊端：
+        var的作用域：函数级 function
+       重复声明：var a = 12 ; var a = 5
+       不能限制常量的修改
+
+       const：定义常量
+       let：防止重复定义变量
+       let的作用域：块级 {}
+       let a = 12 ; let a = 5:会报错，a已定义
+---------------------------------------------------
+       1.解构赋值
+       json={a:12,b:23}
+       let {a,b}=json
+
+       $.ajax('xxx')=>{
+           code:
+           msg:
+       }
+       let {code,msg} =$.ajax('xxx')
+       注意：两边结构必须一样    let {a,b}=[1,2]
+            右边必须合法        let{a,b}={1,2}
+            赋值和解构同时完成  let{a,b};{a,b}={a:1,b:2}
+---------------------------------------------------------            
+       2.箭头函数 function(){} ()=>{}
+            1.仅有一个参数 ()可以不写
+            2.只有一条语句且是return语句 {}可以不写
+         修正this：固定this为当前环境，不会根据执行环境改变而改变   
+----------------------------------------------------------       
+       ...
+       参数展开：
+       收集：剩余参数 let[a,b,...c]=[1,2,3,1,42,34]
+            ...c=[3,1,42,34]
+        展开：function test(a,b){};let arr=[1,2];test(...arr);
+       数组展开
+       Json展开
+----------------------------------------------------------------
+    map: 映射 [14,42]->['不及格','不及格']
+       let arr1=arr.map(item => item >=60? '及格'：'不及格')
+    reduce: n->1
+       let arr1=arr.reduce(function(tmp,item,index){return tmp+item})
+    filter:
+    forEach：
+----------------------------------------------------------------
+    模板字符串
+alert(`第${index}个：${item}`)=alert('第'+index+'个：'item)
+json用法：只能用 双引号
+JSON对象：JSON.stringify({a:12,b:2}) =>'{"a":12."b":2}' JSON-字符串
+        JSON.parse('{"a":12."b":2}') =>{a:12,b:2} 字符串-JSON
+----------------------------------------------------------------
+Promise --封装异步 解决部分异步代码混乱
+let p =  new Promise(function(resolve,reject){
+  // resolve--解决  reject--拒绝
+  $.ajax(
+    url:'http',dataType:'json'，
+    sucess(arr){
+      resolve(arr)
+    },
+    error(res){
+      reject(res)
+    }
+    )
+})
+
+Promise方法：
+Promise.all([ $.ajax(), $.ajax()]) 获取多个数据
+Promise.then(function(){},function(){}) ==(resolve,reject)
+Promise.all([ $.ajax(), $.ajax()]).then(data=>{},err=>{alert('xxx')})
+-------------------------------------------------------------------
+async/await
+
+async function show(){ //标志函数为异步
+  let a = 2;
+  let b = 12;//第一部分
+  let data = await $.ajax();//第二部分 暂停
+  alert()//第三部分
+}
+show();
+
+普通函数会一直执行
+async函数可以‘暂停’ 拆分多个小函数
+
+-----------------------------------------------------------------
+ES5面向对象--伪
+1.没有统一写法  new Person 既是类又是构造函数
+2.没专门继承 Person.call(this,a,b)
+
+ES6面向对象
+class 类声明  
+constructor 构造函数声明
+class Person{
+  constructor(a,b){}
+  showName(){}
+}
+extends 对象继承
+class Worker extends Person(){
+  constructor(a,b){
+      super(a,b)
+  }
+  
+}
+super 父类/超类
+--------------------------------------------------------------------
+ES6模块系统 浏览器暂不支持，需要编译
+
+1.导出 
+变量、常量、函数、class
+export let a = 2;
+默认成员 export default 变量、常量、函数、class
+
+2.导入
+import * as xx from './xx/xx' 引入所有成员
+import xx from './xx/xx'      引入default成员
+import {a,b as name2} from './xx/xx'
+import './xx/xx'； 只引入
+// 异步引入
+let p = import ('./xx/xx')
+
+3.webpack编译 webpack.config.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+    </script>
+  </head>
+  <body></body>
+</html>

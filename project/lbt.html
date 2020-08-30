@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+      }
+      .wrapper {
+        width: 600px;
+        height: 300px;
+        position: absolute;
+        left: 50%;
+        margin-left: -300px;
+        overflow: hidden;
+      }
+      .number {
+        height: 20px;
+        width: 120px;
+        display: block;
+        position: absolute;
+        left: 50%;
+        margin-left: -60px;
+        top: 80%;
+      }
+      .number li {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        background-color: gray;
+        border-radius: 50%;
+        text-align: center;
+        color: white;
+        float: left;
+      }
+      .number .cls {
+        background-color: red;
+      }
+      img {
+        width: 600px;
+        height: 300px;
+      }
+      .btn {
+        width: 30px;
+        height: 60px;
+        font-size: 20px;
+        background-color: black;
+        opacity: 0.3;
+        position: absolute;
+        top: 50%;
+        text-align: center;
+        line-height: 60px;
+        color: white;
+        margin-top: -30px;
+        display: none;
+      }
+      .right {
+        right: 0;
+      }
+    </style>
+    <script src="js/jquery-1.11.3.js"></script>
+    <script>
+      var i = 0;
+      var timer = null;
+      //开启轮播图函数
+      function lunBoTu() {
+        $(".pic li").eq(i).show().siblings("li").hide();
+        $(".number li").eq(i).addClass("cls").siblings("li").removeClass();
+      }
+      //自动轮播图函数
+      function startBoTu() {
+        timer = setInterval(function () {
+          i++;
+          if (i == 4) {
+            i = 0;
+          }
+          lunBoTu();
+        }, 2000);
+      }
+      $(function () {
+        startBoTu();
+        $(".wrapper")
+          .mouseover(function () {
+            clearInterval(timer);
+            $(".btn").show();
+          })
+          .mouseout(function () {
+            startBoTu();
+            $(".btn").hide();
+          });
+        $(".number li").mouseover(function () {
+          i = $(this).index();
+          lunBoTu();
+        });
+        $(".left").click(function () {
+          clearInterval(timer);
+          i--;
+          if (i == -1) {
+            i = 4 - 1;
+          }
+          lunBoTu();
+        });
+        $(".right").click(function () {
+          clearInterval(timer);
+          i++;
+          if (i == 4) {
+            i = 0;
+          }
+          console.log(i);
+          lunBoTu();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <ul class="pic">
+        <li><img src="img/1.jpg" alt="" /></li>
+        <li><img src="img/2.jpg" alt="" /></li>
+        <li><img src="img/7.jpg" alt="" /></li>
+        <li><img src="img/8.jpg" alt="" /></li>
+      </ul>
+      <ul class="number">
+        <li class="cls">1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+      </ul>
+      <div class="left btn"><</div>
+      <div class="right btn">></div>
+    </div>
+  </body>
+</html>

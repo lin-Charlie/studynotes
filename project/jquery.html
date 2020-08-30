@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="js/jquery-1.11.3.js"></script>
+    <script>
+      $(function () {
+        // 索引选择器
+        $("ul li:eq(1)").css();
+        // 获取索引大于3的元素
+        $("ul li:gt(1)").css();
+        // 获取索引小于3的元素
+        $("ul li:lt(1)").css();
+        //--------------------------------------------------------
+        //下一个兄弟节点
+        $("div").next().css("backgroundColor", "red");
+        $("div").nextAll().css("backgroundColor", "red");
+        //上一个兄弟节点
+        $("div").prev().css("backgroundColor", "red");
+        //所有兄弟节点
+        $("div").siblings().css("backgroundColor", "red");
+        //----------------------------------------------------
+        //隐藏，显示--（参数:数字\时间\字符串：slow,fast,normal;
+        //第二个参数为动画结束时触发事件（参数，function（）{}）
+        $("div").hide().show();
+        $("div")
+          .slideUp() //滑入（向上隐藏）
+          .slideDown() //滑出
+          .slideToggle() //切换（显示就隐藏，隐藏就显示）
+          .fadeIn() //淡入
+          .fadeOut() //淡出
+          .fadeToggle() //切换
+          .fadeTo("时间", "透明度"); //设置透明度
+        //--------------------------------------------------------
+        //json数据（键值对），时间，回调函数
+        $("div").animate(
+          { width: "100px", height: "100px" },
+          1000,
+          function () {}
+        );
+        //----------------------------------------------------------
+        // jQuery创建元素
+        $("div").html("<p>aaa</p>"); //覆盖
+        $("div").text("aaa");
+        $("div").html(); //获取元素
+        //----------------------------------------------------------
+        // 对象.html('标签代码')
+        var obj = $("HTML标签代码");
+        //  添加子元素(后，前)//添加兄弟元素（后，前）
+        $("div").append(obj).prepend(obj).after(obj).before(obj);
+        //(剪切)移动元素
+        $("div").append($("div>p")); //('<p>aaa</p>')
+        $($("div>p")).appendTo($("div"));
+        //----------------------------------------------------------
+        //复制元素
+        var obj = $("div>p").clone();
+        $("div").append(obj);
+        $("div").empty(); //清空元素中所有内容
+        $("div").remove(); //清空元素所有内容及自身
+        $("div").val(); //查询值(value值)（表单）
+        $("div").val("aaa"); //添加值
+        $("div").prop("checked", false); //选择框添加属性
+        //----------------------------------------------------------
+        $("a").attr("href", "https://www.baidu.com"); //添加属性(输入一个参数则为查询)
+        $("div").width(); //获取内容的宽
+        $(window).width(); //可视区域宽高
+        $("div").innerWidth(); //获取内容的宽+padding
+        $("div").outerWidth(); //获取内容的宽+padding+border
+        $("div").outerWidth(true); //获取内容的宽+padding+border+margin（true）
+        $(window).scroll(function () {}); //滚动条事件
+        $(document).scrollLeft(); //获取滚动条位置（Top）
+        //----------------------------------------------------------
+        $("div") //（不推荐，使用on）
+          .bind("click", function () {}) //事件绑定
+          .bind({ click: function () {}, click: function () {} }) //键值对的形式
+          .bind("click mousedown", function () {}); //多个事件处理函数一致
+        //----------------------------------------------------------
+        $("div").click(function () {
+          $("<p></p>").appendTo($("div"));
+          //动态绑定事件
+          // 三个参数：1.要触发事件的动态元素
+          //         2.事件类型
+          //         3.执行函数（不推荐，使用on）
+          $("div").delegate("p", "click", function () {}); //通过给父元素绑定事件。子元素触发
+          $("div") //delegate()也是内部调用on方法来绑定
+            .first()
+            .on("click", function () {});
+          // 三个参数：1.事件类型
+          //         2.要触发事件的动态元素
+          //         3.执行函数（不推荐，使用on）
+          $("div").on("click", "p", function () {});
+          //----------------------------------------------------------
+          $("div").off(); //移除父子元素所有事件
+          $("div").off("click", "**"); //解绑子元素，不解父元素（'**'固定写法）
+          $("div").off("click").unbind("click").undelegate("click"); //接除绑定
+          //----------------------------------------------------------
+          $("div").on("click", function (event) {
+            //event事件对象
+            //触发事件方法
+            $("p").click(); //直接调用
+            $("p").trigger("click"); //利用trigger（会触发比如获取焦点）
+            $("p").triggerHandler("click"); //利用triggerHandle（不会触发浏览器默认行为）
+            return false; //取消冒泡，并且能取消默认事件
+            event.stopPropagation(); //取消冒泡，并且能取消默认事件
+          });
+          //----------------------------------------------------------
+          //each迭代方法（循环遍历）
+          $("ul>li").each(function (index, element) {
+            // element == this element是DOM元素
+            $(element).css();
+          });
+          $.noConflict(); //释放$的控制权
+        });
+      });
+    </script>
+  </head>
+  <body></body>
+</html>

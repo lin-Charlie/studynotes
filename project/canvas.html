@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      window.onload = function () {
+        /** @type {HTMLCanvasElement} */
+        var canvas = document.querySelector("#canvas");
+        // 获取绘图上下文和绘图工具箱
+        var context = canvas.getContext("2d");
+        /*  context.strokeRect(x,y,width,height);以路径的方式绘制矩形
+        ****先设置样式再绘制图形
+            contex.strokeStyle = 'color'
+                  .lineWidth = number;
+                    设置连接样式
+                  .lineJoin = 'round'（round-圆角/miter-直角/bevel-三角）
+
+            小问题：如果以上个矩形右下为起始绘制会覆盖一像素，应该再加0.5像素
+
+            fillRect();以填充方式绘制矩形 实心矩形
+            clearRect();重新绘制并透明化--清空
+            三个方法参数一致
+        */
+        context.lineWidth = 10;
+        context.lineJoin = "round";
+        context.strokeRect(10, 10, 100, 50);
+        /*--------------------------------------------------------------*/
+        // 另外方法绘制矩形
+        context.rect(x, y, width, height);
+        context.stroke();
+
+        /*==============================================================*/
+        // 状态设置，还未绘制
+        context.moveTo(100, 100); //绘制原点 可以多个原点
+        context.lineTo(250, 250); //表示从上一个坐标点到现在的坐标点(x,y)
+        // 多条线段，折线
+        context.lineTo(100, 400);
+        // 自动闭合，更加完美
+        context.closePath();
+        context.strokeStyle = "red";
+        context.lineWidth = 10;
+        // 调用直线绘制函数真正绘制
+        context.stroke();
+        /*==============================================================*/
+        // 开启新的绘制，应用于样式不一致
+        context.beginPath();
+        context.moveTo(200, 100); //也可以用lineTo()
+        context.lineTo(350, 250);
+        context.lineTo(200, 400);
+        context.strokeStyle = "blue";
+        context.stroke();
+        /*==============================================================*/
+        /*设置路径末端效果
+        round：圆形
+        butt：默认
+        square：变成方形，会比之前长一些---添加了线条宽的正方形
+        */
+        context.lineCap = "round";
+        /*==============================================================*/
+        context.save(); //保存状态--颜色 将样式容器里的状态放入样式栈
+        context.strokeStyle = "red";
+        context.save();
+        context.restore(); //输出（恢复）红色 从样式栈中取到样式容器中
+        context.restore(); //黑色
+        context.strokeRect(); //页面颜色从样式容器中获取
+
+        context.save();
+        //样式代码
+        context.beginPath();
+        context.restore(); //不会影响其他样式设置，多人开发
+        /*==============================================================*/
+        /*绘制圆形
+        参数1 2：开始坐标 x，y
+        参数3：半径
+        4：开始角度
+        5:结束角度 参数4,5本身是弧度--角度*Math.PI/180
+        6:方向 true/false*/
+        context.arc(100, 100, 100, 0, (180 * Math.PI) / 180);
+        /*绘制弧形*/
+        context.arcTo(200, 50, 200, 200, 50);
+        /*二次贝塞尔曲线
+        一个控制点，一个结束点*/
+        context.quadraticCurveTo(x, y, x1, y1);
+        /*三次贝塞尔曲线
+        两个控制点，一个结束点*/
+        context.bezierCurveTo();
+        /*==============================================================*/
+        /*画板起始点坐标移动 translate()*/
+        context.translate(x, y);
+        // 画板坐标轴旋转rotate()
+        context.rotate((45 * Math.PI) / 180);
+        // 画板缩放scale(x,y) 按比例
+        context.scale(2, 1);
+        /*==============================================================*/
+        /*画板绘图*/
+        // 创建图片对象
+        var img = new Image();
+        img.src = "./img/1.jpg";
+        // 图片加载事件确保图片已经加载完毕
+        img.onload = function () {
+          // 图片加载成功
+          context.drawImage("图片对象", x, y, width, height);
+        };
+        //
+        img.onload = function () {
+          // 创建图像模式 图片显示方式
+          var pattern = context.createPattern("图片对象", "repeat");
+          context.fillStyle = pattern;
+          context.fillRect(0, 0, width, height);
+        };
+
+        /*==============================================================*/
+        /*线性渐变*/
+        // 创建线性渐变对象 开始和结束的横纵坐标
+        var linear = context.createLinearGradient(x, y, x1, y1);
+        linear.addColorStop(0, "red");
+        linear.addColorStop(1, "green");
+        context.fillStyle = linear;
+        context.fillRect();
+        //径向渐变 第一个圆的横纵坐标，半径----第二个圆的横纵坐标，半径
+        var radia = context.createRadialGradient();
+        radia.addColorStop(0, "red");
+        radia.addColorStop(0.2, "blue");
+        radia.addColorStop(0.6, "yellow");
+        radia.addColorStop(1, "green");
+        context.fillStyle = radia;
+        context.fillRect();
+        /*==============================================================*/
+        /*绘制文本
+        文本最好有字体和大小*/
+        var radia = context.createRadialGradient(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        radia.addColorStop();
+        context.fillStyle = radia; //设置文本颜色渐变
+        context.font = "40px sans-serif"; //默认字体
+        context.strokeText("文本内容", 100, 100);
+        context.fillText("文本内容", 100, 100);
+        //文本水平对齐方式  以绘制文本起点为中心点
+        context.textAlign = "center"; //start和left效果一样 end和right
+        /*文本垂直对齐方式 基于文本基线 
+        top：文本基线在文本顶部
+        middle：在中间
+        bottom：底部*/
+        context.textBaseline = "hanging";
+        var textwidth = context.measureText("文本内容"); //获取绘制文本宽度
+        // 设置阴影
+        // 阴影偏移量
+        context.shadowOffsetX = number;
+        context.shadowOffsetY = number;
+        // 阴影颜色
+        context.shadowColor = "red";
+        // 阴影模糊度
+        context.shadowBlur = 10;
+        /*==============================================================*/
+        // 像素 1个像素点（r,g,b,a）有四个小点，每个小点有其中一个值0-255 a:透明度
+        // 获取画布所有像素数据
+        var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < imgData.data.length; i++) {
+          //给每个像素点赋值 i是一个小点
+          imgData.data[4 * i] = 255; //r
+          imgData.data[4 * i + 1] = 255; //g
+          imgData.data[4 * i + 2] = 255; //b
+          imgData.data[4 * i + 3] = 255; //a
+        }
+        //将像素数据绘制到画布上 （像素数据，偏移量）
+        context.putImageData(imgData, x, y);
+
+        /*操作单个像素点*/
+        //通过坐标获得单个像素点的颜色
+        function getPxColor(imgData, x, y) {
+          var color = [];
+          var width = imgData.width;
+          color[0] = imgData.data[(width * y + x) * 4];
+          color[1] = imgData.data[(width * y + x) * 4 + 1];
+          return color;
+        }
+        var color = getPxColor(imgData, x, y);
+        /*==============================================================*/
+        context.globalAlpha = 0.5; //全局透明
+        /*适用重叠样式*/
+        context.globalCompositeOperation = "source-in"; //全局复合操作
+        var path = canvas.toDataURL(); //获取画布图片的路径
+        context.isPointInPath(x, y); //监测坐标是否包含
+        /*==============================================================*/
+        /*==============================================================*/
+        /*==============================================================*/
+      };
+    </script>
+  </head>
+  <body>
+    <!-- 不建议在样式里改变宽高（css/DOM）应该在元素本身否则会变形 -->
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </body>
+</html>
