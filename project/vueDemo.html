@@ -204,7 +204,7 @@
         border-radius: 50%;
       }
       /* 列表过渡动画 */
-      ul {
+      /* ul {
         list-style: none;
         margin: 0;
         padding: 0;
@@ -230,7 +230,7 @@
       }
       .v-leave-active {
         position: absolute;
-      }
+      } */
     </style>
     <!-- <div class="box">
       <input type="button" value="toggle" @click="flag=!flag" />
@@ -302,6 +302,59 @@
         el: ".box",
         data: {
           flag: false,
+        },
+      });
+    </script>
+    <!-- ============================================================= -->
+    <!-- 组件传值 -->
+    <div id="value">
+      <com1 @newscontent="addNews"></com1>
+      <com2 v-for="(item, i) in list" :key="i" :item="item"></com2>
+    </div>
+
+    <script>
+      Vue.component("com1", {
+        template: `<div>
+        <input type='text' v-model='name'/><br>
+        <textarea v-model='content'></textarea><br>
+        <input type='button' value='add' @click='add'></div>`,
+        data() {
+          return {
+            name: "",
+            content: "",
+          };
+        },
+        methods: {
+          add() {
+            const dataNews = {
+              name: this.name,
+              content: this.content,
+            };
+            console.log(dataNews);
+            this.$emit("newscontent", dataNews);
+          },
+        },
+      });
+      Vue.component("com2", {
+        template:
+          "<ul><li>{{item.name}}</li><br><li>{{item.content}}</li><br></ul>",
+        props: ["item"],
+      });
+      var vm = new Vue({
+        el: "#value",
+        data: {
+          list: [
+            { name: "zzx", content: "1221" },
+            { name: "zzc", content: "adad" },
+            { name: "zzw", content: "adf" },
+            { name: "zzr", content: "sdw" },
+          ],
+        },
+        methods: {
+          addNews(data) {
+            console.log(data);
+            this.list.push(data);
+          },
         },
       });
     </script>

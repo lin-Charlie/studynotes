@@ -336,8 +336,8 @@
     </style>
 
     <!-- 添加transition标签
-    name属性可以修改v-这个前缀，区分不同元素的过渡效果 -->
-    <transition name='xxx'>
+    name属性可以修改v-这个前缀，区分不同元素的过渡效果 mode:模式-->
+    <transition name='xxx' mode='out-in'>
       <h3></h3>
     </transition>
 
@@ -458,9 +458,137 @@
       })
     </script>
 
+    <!-- 多个组件切换 -->
+    <div>
+      <!-- is属性可以显示指定名称的组价 -->
+      <component :is="componentId"></component>
+    </div>
+    <!-- ttainstion tranistion-group template component  Vue提供的标签 -->
     /*================================================================*/
+    <!-- 组件传值 -->
+    <div id="value">
+      <!-- 如果想给子组件传递data中的数据需要使用属性绑定的形式 (v-bind)
+       子组件身上自定义数据就是你要传递给子组件的数据-->
+      <com1 :msg='parentMsg'></com1>
+      <!-- 如果想要传递methods中的方法需要使用(v-on)事件绑定的形式 -->
+      <com3 @myfunc='show'></com3>
+    </div>
+    <script>
+      var vm = new Vue({
+        el:"#value",
+        data:{
+          parentMsg:"123456",
+          obj:{//传递对象数据
+            name:'zzc',
+            age:12
+          }
+        },
+        methods: {
+          show(data){//传递function
+            console.log("调用show方法"+data)//data为子组件向父组件传递的值
+            // 本质还是调用父组件的方法，只是在调用时把数据当参数传给这个方法了
+          }
+        },  
+        components:{//定义私有组件
+          'com1':{//Vue中子组件默认无法直接获取父组件中的数据
+              template:"<h2>haha:{{msg}}</h2>",
+              props:['msg']//Vue中只有props是数组，其他带s的属性都是对象
+          },
+          'com2':{//数据是对象
+              template:"<h2>haha:{{JSON.stringify(sobj)}}</h2>",
+              props:['sobj']
+          },
+          'com3':{
+            template:"<input type='button' value='click' @click='btnclick'>",
+            data() {
+              return {
+                sonMsg:"子组件传递的值"
+              }
+            },
+            methods: {
+              btnclick(){
+                //调用父组件传来的myfunc方法，emit引申为触发 第二参数为传值
+                this.$emit('myfunc',this.sonMsg)//myfunc需小写
+              }
+            },
+          }
+        }
+      })
+    </script>
     /*================================================================*/
+    <!-- refs属性 -->
+    <!-- ref--reference -->
+    <h2 ref="myh2">1111</h2>
+    <com1 ref='mycom1'></com1>
+    <script>
+      Vue.component('com1', {
+        template:'<h4>123</h4>',
+        data() {
+          return {
+            msg:''
+          }
+        },
+        props:[]
+        /*props和data的区别
+        data：是一个function且要返回一个对象
+        data的数据是组件私有的可读可写，props是传递的只可读
+        props中的数据不可以直接修改必须在data上重新定义一个*/
+      })
+
+      var vm = new Vue({
+        el:"",
+        methods: {
+          getInfo(){
+            console.log(this.$refs.myh2.innerTHML)//获取页面元素数据
+            console.log(this.$refs.mycom1.msg/*methods中的方法*/)//获取组件
+          }
+        },
+      })
+    </script>
     /*================================================================*/
+    <!-- 前端路由 -->
+    <component :is="comname"></component>
+    <script src="js/vue-router.js">//导入后全局就有了VueRouter构造函数</script>
+    <script>
+      // hash(#/)不会刷新页面也不会发起新的http请求，只是实现客户端页面定位
+      // #会修改浏览器端的访问记录
+      window.location.hash//获取#值
+      window.onhashchange=function(){//监听hash，当#值发生改变就会触发事件
+        location.hash//获取hash值(#值)
+      }
+      var vm = new Vue({
+        data:{
+          comname:'com1'
+        },
+        mounted() {//页面渲染后执行一些操作
+          window.onhashchange=()=>{//根据hash切换显示组件
+            const hash = location.hash
+            switch(hash){
+              case'#/a':this.comname=com1;
+              break;
+              case'#/b':this.comname=com2;
+              break;
+            }
+          }
+        },
+        router//把路由对象挂载到vm实例上 简写(router:router)
+      })
+
+      const login = {
+        template:'<h3>登录组件</h3>'
+      }
+      const router = new VueRouter({
+        routes:[//路由规则
+          {path:'/login',component:login},
+          /*path为要匹配的hash值 component表示要展示的组件*/
+          {path:'/reg',component:reg},
+          /*匹配到后要展示到页面需要添加<router-view></router-view>标签*/
+        ]
+      })
+        /*<router-link to='/reg' tag='name'></router-link>
+        <!-- 路由的链接 默认渲染为a标签 -->
+        <router-view></router-view>*/
+    </script>
     /*================================================================*/
     /*================================================================*/
     /*================================================================*/
