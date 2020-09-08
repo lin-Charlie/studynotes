@@ -4,17 +4,38 @@
 // 注意：ES6中使用import导入其他模块的语法，chrome不支持
 
 // 在webpack中一切文件皆模块
-import $ from "../../js/jquery-1.12.4"; //导入模块
-
-// 引入css文件
-import mystyle from "./css/index.css";
+import "../src/js/jquery-1.11.3"; //导入模块
 
 // jQuery入口函数
 $(function () {
-  console.log("success");
   $("li:odd").css("backgroundColor", "pink");
   $("li:even").css("backgroundColor", "yellow");
 });
+
+// 引入css文件
+// import mystyle from "./css/index.css";
+// 今后推荐下面引入写法
+import "./css/index.css";
+
+import "./css/index.scss";
+
+class Person {
+  constructor(name) {
+    // name是实例属性 只能通过实例来访问的属性
+    this.name = name;
+  }
+  sayMyName() {
+    console.log(this.name);
+  }
+  // static关键字，专门用来创建静态属性
+  static info = "这是静态属性";
+}
+// 直接使用构造函数点出来的属性
+Person.info = "这是静态属性";
+
+let person = new Person("zb");
+person.sayMyName();
+// console.log(Person.info);
 /*export default {
   name: "zc",
   age: 12,

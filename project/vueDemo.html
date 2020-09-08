@@ -394,6 +394,9 @@
       />
     </div>
     <script>
+      const login = {
+        template: "<h2>render函数组件</h2>",
+      };
       const vm = new Vue({
         el: ".app",
         data: {
@@ -405,6 +408,9 @@
           txChage() {
             this.tName = this.fName + this.lName;
           },
+        },
+        render(h) {
+          return h(login);
         },
       });
     </script>

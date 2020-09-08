@@ -9,10 +9,19 @@ npx webpack  --config webpackconfig.js
 
 // 将页面托管到内存中的插件
 const htmlWebpackPlugin = require("html-webpack-plugin");
+// 导入webpack模块
+const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/main.js", //入口文件
   // entry: path.join(__dirname, "./src/main.js"),
+
+  /*多入口文件(区分第三方包)
+  entry: {
+    app: path.join(__dirname, "./src/main.js"), //主文件入口
+    vendors: ["jquery"],
+  }, //第三方包的名称*/
+
   output: {
     //出口文件
     filename: "bundle.js",
@@ -26,7 +35,22 @@ module.exports = {
       template: path.join(__dirname, "./src/index.html"), //要把那个页面作为模板复制一份
       // 托管到内存中
       filename: "index.html", //将来在内存中复制出来的页面的名称
+      minify: {
+        //压缩选项
+        removeComments: true, //移除注释
+        collapseWhiltespace: true, //合并空白字符
+        removeAttributeQuotes: true, //移除属性节点的引号
+      },
     }),
+    /* 1.抽离第三方包
+    new webpack.optimize.CommonsChunkPlugin({
+        name: "vendors",
+        filename: "vendors.js", //指定抽离出来的第三方包的文件名
+     }),
+     2.压缩文件
+    new webpack.optimize.UglifyJsPlugin({
+       compress()
+     })*/
   ],
   // 配置处理非js文件的loader
   module: {
@@ -34,6 +58,15 @@ module.exports = {
       //配置非js文件与loader之间的关系
       { test: /\.css$/, use: ["style-loader", "css-loader"] },
       //匹配以.css结尾的文件 test--匹配 use--使用
+      { test: /\.less$/, use: ["style-loader", "css-loader", "less-loader"] },
+      { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
+      { test: /\.jpg|png$/, use: ["url-loader"] }, //处理样式表中的图片
+      // 处理ES高级语法需要的babel规则 exclude排除一些不需要的转换的文件,必需的
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: "babel-loader",
+      },
     ],
   },
 

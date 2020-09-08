@@ -716,75 +716,270 @@
     /*================================================================*/
     <!-- webpack -->
     <script>
-      /*网页常见静态资源
-      1.样式表
-      .less .css .sass .scss(sass最新版本后缀名)
-      2.JavaScript脚本文件
-      .js .ts .coffee
-      3.图片
-      4.字体文件
-      .eot .svg .woff .ttf .woff2
-      5.模板文件
-      .ejs .vue .jade
-      问题：
-      1.当静态资源多了会发起很多二次请求，导致页面加载慢
-      2.会出现静态资源的前后依赖问题
-      */
-      /*webpack打包
-      1.打包js文件
-        +写好配置文件
-        +项目热更新 --webpack-dev-server 将bundle.js托管到内存中
-        +页面托管 --html-webpack-plugin 还需在webpackconfig文件中配置
-          plugins: [
-            //插件数组
-            new htmlWebpackPlugin({
-              //创建一个把HTML首页托管到内存中的插件
-              template: path.join(__dirname, "./src/index.html"), //要把那个页面作为模板复制一份
-              // 托管到内存中
-              filename: "index.html", //将来在内存中复制出来的页面的名称
-            }),
-          ],
-      2.打包css文件
-        +需要安装合适的loader(style-loader/css-loader)
-        +在config文件中配置loader
-          module: {
-            rules: [
-              //配置非js文件与loader之间的关系
-              (loader调用顺序是从后往前，处理完的结果交给前面的loader)
-              { test: /\.css$/, use: ["style-loader", "css-loader"] },
-              //匹配以.css结尾的文件 test--匹配 use--使用(顺序固定)
-            ],
-          },
-      */ 
-         
-      /*webpack插件
-      1.webpack-dev-server
-        1.项目自启动，把bundle.js文件托管到内存中
-        2.在package.json中的script添加
-          "dev": "webpack-dev-server --open --port 3000 --host 127.0.0.1"
-          (open表示自动打开浏览器 port指定端口 
-          --hot更改以补丁的形式添加不会更改bundle，效率跟高)
-      2.html-webpack-plugin：(不用手动引入js文件)
-        根据给定路径的页面复制一份一样的页面
-        2.在内存页面中，自动在页面底部把打包好的bundle.js文件注入为script标签
-        3.配置插件const htmlWebpackPlugin = require("html-webpack-plugin");
-        4.在config文件配置对象中新增一个'plugin'节点
-         plugins: [
+    /*网页常见静态资源
+    1.样式表
+    .less .css .sass .scss(sass最新版本后缀名)
+    2.JavaScript脚本文件
+    .js .ts .coffee
+    3.图片
+    4.字体文件
+    .eot .svg .woff .ttf .woff2
+    5.模板文件
+    .ejs .vue .jade
+    问题：
+    1.当静态资源多了会发起很多二次请求，导致页面加载慢
+    2.会出现静态资源的前后依赖问题
+    */
+
+    /*webpack打包
+    1.打包js文件
+      +写好配置文件
+      +项目热更新 --webpack-dev-server 将bundle.js托管到内存中
+      +页面托管 --html-webpack-plugin 还需在webpackconfig文件中配置
+        plugins: [
+          //插件数组
           new htmlWebpackPlugin({
             //创建一个把HTML首页托管到内存中的插件
-            template: path.join(__dirname, "./src/index.html"),
+            template: path.join(__dirname, "./src/index.html"), //要把那个页面作为模板复制一份
+            // 托管到内存中
             filename: "index.html", //将来在内存中复制出来的页面的名称
           }),
         ],
-      */  
+    2.打包css文件
+      +需要安装合适的loader(style-loader/css-loader)
+      +在config文件中配置loader
+        module: {
+          rules: [
+            //配置非js文件与loader之间的关系
+            (loader调用顺序是从后往前，处理完的结果交给前面的loader)
+            { test: /\.css$/, use: ["style-loader", "css-loader"] },
+            //匹配以.css结尾的文件 test--匹配 use--使用(顺序固定)
+          ],
+        },
+    3.打包less文件
+      +需要装less-loader less
+      +配置规则
+          { test: /\.less$/, use: ["style-loader", "css-loader", "less-loader"] },
+          less是less-loader内置依赖项不需要在规则中显示配置，并要添加css的loader
+    4.打包sass文件
+      +需要装sass-loader node-sass
+      +配置规则
+          { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
+    5.打包img文件
+      +需要安装url-loader file-loader
+      +配置规则
+        { test: /\.jpg|png|gif|bmp$/, use: ["url-loader?limit="&name=
+        [hash:7]-[name].[ext]] },
+        +只有一个loader时可以只写字符串(默认转换为base64)
+        +可以使用?传递参数，limit：固定参数，给定数值是图片大小.单位Byte；如果指定了
+          limit参数则只有图片的大小小于给定值时才会转换为base64格式的图片。否则不转换
+        +[name]--原文件名.[ext]--原后缀名 name参数文件重命名
+        +file-loader是url-loader内置依赖项
+    */ 
+        
+    /*webpack插件
+    1.webpack-dev-server
+      +项目自启动，把bundle.js文件托管到内存中
+      +在package.json中的script添加
+        "dev": "webpack-dev-server --open --port 3000 --host 127.0.0.1"
+        (open表示自动打开浏览器 port指定端口 
+        --hot更改以补丁的形式添加不会更改bundle，效率跟高)
+    2.html-webpack-plugin：(不用手动引入js文件)
+      +根据给定路径的页面复制一份一样的页面
+      +在内存页面中，自动在页面底部把打包好的bundle.js文件注入为script标签
+      +配置插件const htmlWebpackPlugin = require("html-webpack-plugin");
+      +在config文件配置对象中新增一个'plugin'节点
+        plugins: [
+        new htmlWebpackPlugin({
+          //创建一个把HTML首页托管到内存中的插件
+          template: path.join(__dirname, "./src/index.html"),
+          filename: "index.html", //将来在内存中复制出来的页面的名称
+        }),
+      ],
+    */ 
+   
+     /*处理ES高级语法，
+      1.安装相关包
+      "@babel/core": "^7.11.6",
+      "@babel/plugin-proposal-class-properties": "^7.10.4",
+      "@babel/plugin-transform-runtime": "^7.11.5",
+      "@babel/preset-env": "^7.11.5",
+      "@babel/runtime": "^7.11.2",
+      "babel-loader": "^8.1.0",
+      (trainsform-runtime运行时编译ES6)
+      +以babel-preset开头的叫Babel语法 babel-plugin--Babel插件
+      +babel-loader:他只负责转换但并不知道高级ES6语法和低级语法的对应关系
+      +@babel-preset-env：转换高级语法的字典
+
+      2.配置config
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: "babel-loader",
+        },
+
+      3.配置文件.babelrc
+        {
+          "presets": ["@babel/preset-env"],
+          "plugins": [
+            "@babel/plugin-transform-runtime",
+            "@babel/plugin-proposal-class-properties"
+          ]
+        }
+     */ 
     </script>
     /*================================================================*/
+    <!-- ES6中导入与导出 -->
+    <script>
+      // export default = {
+      //   aa='111'
+      // }
+      // export var a = '222'
+
+      // import name from 'xx.js'
+      // import {a} from 'xx.js'
+      // import {a as info} from 'xx.js'
+
+      /*1.在模块中，只能使用一次export default向外暴露成员
+      2.export default向外暴露成员对象可以使用任何合法的变量名来接收
+      3.export default和export可以同时使用
+      4.使用import from得到的变量只能拿到export default导出的成员(****)
+      5.要接收export导出的只能使用import {成员名} from 得到(按需导出)
+      6.export导出成员可以导出多次，同时只能使用导出的名称来接收，
+      如果想起别名需要使用as关键字
+      7.按需导出时接收顺序可以任意调整
+      */
+    </script>
     /*================================================================*/
+    <!-- class面向对象编程 -->
+    <script>
+      class Person {
+        // 在class类中必须有constructor，没有显示定义，系统会默认提供一个看不见的
+        // 如果用户显示定义了则会覆盖掉默认的
+        constructor(name) {
+          // name是实例属性 只能通过实例来访问的属性
+          this.name = name;
+        }
+        // 实例方法
+        sayMyName() {
+          console.log(this.name);
+        }
+        // static关键字，专门用来创建静态属性
+        static info = "这是静态属性";
+        static show(){
+          console.log('这是静态方法')
+        }
+      }
+      // 直接使用构造函数点出来的属性
+      Person.info = "这是静态属性";
+
+      let person = new Person("zb");
+      person.sayMyName();
+    </script>
     /*================================================================*/
+    <!-- webpack发布策略 -->
+    <script>
+      /*1.新建一个发布配置文件，更改相关配置信息(热更新、开发调试插件)
+        2.为图片新建一个文件夹
+        ({ test: /\.jpg|png$/, use: ["url-loader?limit=xxx&name=images/xxx"] })
+        3.删除旧文件（clean-webpack-plugin）
+          new cleanPlugin(['dist'])//指定删除目录
+        4.抽离第三方包
+          +引入webpack
+            const webpack = require("webpack");
+          +改写入口文件
+            entry: {
+              app: path.join(__dirname, "./src/main.js"), //主文件入口
+              vendors: ["jquery"],
+            }, //第三方包的名称
+          +添加抽离插件
+            new webpack.optimize.CommonsChunkPlugin({
+              name: "vendors",
+              filename: "js/vendors.js", //指定抽离出来的第三方包的文件名
+            }),
+        5.压缩文件
+          new webpack.optimize.UglifyJsPlugin({
+            compress(
+              warnings:false;//压缩文件完成后移除警告信息
+            )
+          })
+        6.抽取样式表
+          +安装插件extract-text-webpack-plugin
+          +添加插件节点
+            new extractTextPlugin('style.css')
+          +修改匹配规则
+            { test: /\.css$/, use:extractTextPlugin.extract({
+              fallback:'style-loader',
+              use:['css-loader'],
+              publicPath:'../'//样式中包含路径时需要添加../前缀
+            }) }
+        7.压缩样式表
+          +安装optimize-css-assets-webpack-plugin
+          +导入模块
+          +添加插件节点
+            new optimizeCssAssetsWebpack({})
+      */
+    </script>
     /*================================================================*/
+    <!-- rendor函数渲染组件 -->
+    <script>
+      const login = {
+        template:'<h2>这是一个组件</h2>'
+      }
+      const vm = new Vue({
+        el:'',
+        // render函数会把之前的内容清掉，只有显示render中的组件
+        render(createElements) {/*规定了render必须为一个函数且
+          有一个形参createElements，Vue再调render时会给我们传递这个形参*/
+          return createElements(login)
+        },
+      })
+      /*
+      */
+    </script>
     /*================================================================*/
+    <!-- vue方式创建组件 -->
+    <script>
+      /*安装vue
+      1.创建.vue文件
+        <template>
+          <div>
+            <h3>这是vue方式创建的组件</h3>
+          </div>
+        </template>
+      2.安装vue-loader和vue-template-compiler
+      3.配置匹配规则
+        { test: /\.vue$/, use: "vue-loader" },
+      4.导入插件(是必需的--Vue Loader 的配置和其它的 loader 不太一样。
+        除了通过一条规则将 vue-loader 应用到所有扩展名为 .vue 的文件上之外，
+        请确保在你的 webpack 配置中添加 Vue Loader 的插件)
+        const VueLoaderPlugin = require("vue-loader/lib/plugin");
+        +添加插件
+          new VueLoaderPlugin()*/
+    </script>
+
+    <!-- vue方式使用vue-router -->
+    <script>
+      /*安装vue-router
+      1.配置vue-router
+        import VueRouter from "vue-router";
+        Vue.use(VueRouter);
+      2.建立路由规则 必须在Vue实例前
+      3.在Vue实例中添加路由规则 router
+      4.在App.vue中添加router-link和router-view
+      */
+      /*scoped属性
+      scoped为这个组件样式设置作用域,会给子元素添加一个自定义属性data-xxx
+          <style scoped>
+          h3 {
+            color: aqua;
+          }
+          </style>
+      +路由模块封装
+      */
+    </script>
     /*================================================================*/
-    /*================================================================*/
+    /*===============================================================*/
     /*================================================================*/
     /*================================================================*/
     /*================================================================*/
