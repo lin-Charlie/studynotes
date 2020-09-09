@@ -80,6 +80,8 @@ module.exports = {
       },
       // 匹配vue文件
       { test: /\.vue$/, use: "vue-loader" },
+      // 处理样式中字体文件路径的问题，引用bootstrap中的图标库时
+      { test: /\.woff|ttf|woff2|eot|svg$/, use: "url-loader" },
     ],
   },
 
