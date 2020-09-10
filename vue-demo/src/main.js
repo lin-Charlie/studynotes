@@ -11,6 +11,22 @@ import "../lib/mui/css/mui.min.css";
 // 导入路由对象
 import App from "./components/App.vue";
 import router from "./router.js";
+// 导入axios
+import axios from "axios";
+// 将axios挂载到Vue原型上
+Vue.prototype.$axios = axios;
+axios.create({
+  baseURL: "http://127.0.0.1:3000/", //设置默认根路径
+});
+
+// 定义全局时间过滤器
+// Vue.filter("timeFormat", function(datastr,formatData) {
+//   // 过滤器的处理函数中必须return
+//   return moment(datastr).format(formatData);
+//   // moment：格式化时间的插件
+// });
+// 过滤器的调用
+// {{item.time|timeformat('YYYY-MM-DD HH:mm:ss')}}
 
 const vm = new Vue({
   el: ".app",

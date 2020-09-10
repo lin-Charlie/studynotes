@@ -4,10 +4,13 @@
     <!-- 头部区域 MintUI -->
     <mt-header fixed title="Vue项目-MintUI">
       <span to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
+        <mt-button icon="back" @click="prev">返回</mt-button>
       </span>
     </mt-header>
-    <router-view></router-view>
+    <transition>
+      <router-view></router-view>
+    </transition>
+
     <!-- 底部区域 Mui-->
     <nav class="mui-bar mui-bar-tab">
       <router-link class="mui-tab-item" to="/home">
@@ -37,7 +40,12 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    prev() {
+      // 回退上次路由
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 
@@ -48,5 +56,24 @@ h3 {
 }
 .app-content {
   padding-top: 40px;
+  /* 组件切换时会有两个组件导致页面扩大，需要设置超出部分的隐藏 */
+  overflow: hidden;
+}
+/* 设置动画效果 */
+.v-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+/* 离开时方向 */
+.v-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+  /* 防止页面跳动 */
+  position: absolute;
+}
+/* 启动动画 */
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s ease;
 }
 </style>
