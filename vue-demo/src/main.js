@@ -1,23 +1,12 @@
 // 注意：这里的vue和网页中引用的vue不同
 import Vue from "vue";
-// 导入mint-ui组件库
-import MintUI from "mint-ui";
-// 导入mint-ui的样式表
-import "mint-ui/lib/style.css";
-// 全局配置组件库 Vue.use批量注册mint组件
-Vue.use(MintUI);
-// 导入mui样式表
-import "../lib/mui/css/mui.min.css";
+
+// 导入全局配置
+import "./globalConfig.js";
+
 // 导入路由对象
 import App from "./components/App.vue";
 import router from "./router.js";
-// 导入axios
-import axios from "axios";
-// 将axios挂载到Vue原型上
-Vue.prototype.$axios = axios;
-axios.create({
-  baseURL: "http://127.0.0.1:3000/", //设置默认根路径
-});
 
 // 定义全局时间过滤器
 // Vue.filter("timeFormat", function(datastr,formatData) {
