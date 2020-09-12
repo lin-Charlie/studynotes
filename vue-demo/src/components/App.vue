@@ -2,7 +2,7 @@
   <!-- template中只能有一个根元素 -->
   <div class="app-content">
     <!-- 头部区域 MintUI -->
-    <mt-header fixed title="Vue项目-MintUI">
+    <mt-header fixed title="Vue项目-MintUI" class="appheader">
       <span to="/" slot="left">
         <mt-button icon="back" @click="prev">返回</mt-button>
       </span>
@@ -51,13 +51,16 @@ export default {
 
 // scoped为这个组件样式设置作用域,会给子元素添加一个自定义属性data-xxx
 <style scoped>
-h3 {
-  color: aqua;
+.appheader {
+  z-index: 99;
 }
 .app-content {
   padding-top: 40px;
   /* 组件切换时会有两个组件导致页面扩大，需要设置超出部分的隐藏 */
   overflow: hidden;
+}
+.mui-tab-item {
+  touch-action: none;
 }
 /* 设置动画效果 */
 .v-enter {

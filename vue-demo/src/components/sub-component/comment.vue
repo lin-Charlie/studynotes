@@ -3,14 +3,8 @@
     <h4>发表评论---{{ NewsId }}</h4>
     <hr />
 
-    <textarea
-      class="content"
-      placeholder="请输入评论内容"
-      v-model="msg"
-    ></textarea>
-    <mt-button type="primary" size="large" @click="printMsg"
-      >发表评论</mt-button
-    >
+    <textarea class="content" placeholder="请输入评论内容" v-model="msg"></textarea>
+    <mt-button type="primary" size="large" @click="printMsg">发表评论</mt-button>
     <div class="item">
       <div class="item-list" v-for="(item, i) in cmtlist" :key="i">
         <div class="item-list-tittle">

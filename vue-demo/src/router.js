@@ -7,6 +7,7 @@ import Content from "./components/tabbar/content.vue";
 import Message from "./components/tabbar/message.vue";
 import Download from "./components/layer2route/download.vue";
 import DoloadInfo from "./components/layer2route/DoloadInfo.vue";
+import Search from "./components/search/search.vue";
 // 导入路由模块
 import VueRouter from "vue-router";
 // 安装
@@ -22,6 +23,7 @@ const router = new VueRouter({
     { path: "/home/download", component: Download },
     // 利用props传递参数
     { path: "/home/DoloadInfo/:id", component: DoloadInfo, props: true },
+    { path: "/home/search", component: Search },
   ],
   linkActiveClass: "mui-active", //设置路由被激活时的类名(点击等)
 });

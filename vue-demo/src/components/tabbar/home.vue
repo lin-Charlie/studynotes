@@ -2,14 +2,11 @@
   <div>
     <mt-swipe :auto="4000">
       <mt-swipe-item v-for="(item, i) in imgInfo" :key="i">
-        <img :src="item.url" alt="" />
+        <img :src="item.url" alt />
       </mt-swipe-item>
     </mt-swipe>
     <router-view></router-view>
-    <link
-      rel="stylesheet"
-      href="//at.alicdn.com/t/font_2059638_62wtfjp05tc.css"
-    />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2059638_62wtfjp05tc.css" />
     <ul class="mui-table-view mui-grid-view mui-grid-9">
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <a href="#">
@@ -19,15 +16,15 @@
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <router-link to="/home/download">
-          <img src="/src/img/download.png" alt="" />
+          <img src="/src/img/download.png" alt />
           <div class="mui-media-body">location</div>
         </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-        <a href="#">
+        <router-link to="/home/search">
           <span class="mui-icon mui-icon-search"></span>
           <div class="mui-media-body">Search</div>
-        </a>
+        </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <a href="#">

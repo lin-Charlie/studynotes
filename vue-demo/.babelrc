@@ -1,0 +1,17 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    // [
+    //   "@babel/plugin-transform-runtime",
+    //   {
+    //     corejs: 3,
+    //     helpers: true,
+    //     regenerator: true,
+    //     useESModules: false,
+    //   },
+    // ],
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-transform-modules-commonjs", { "strictMode": false }]
+  ]
+}
