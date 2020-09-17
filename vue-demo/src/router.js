@@ -8,6 +8,9 @@ import Message from "./components/tabbar/message.vue";
 import Download from "./components/layer2route/download.vue";
 import DoloadInfo from "./components/layer2route/DoloadInfo.vue";
 import Search from "./components/search/search.vue";
+import Shop from "./components/shop/shop.vue";
+import Shopinfo from "./components/shop/shopinfo.vue";
+import Shopdec from "./components/shop/shopdec.vue";
 // 导入路由模块
 import VueRouter from "vue-router";
 // 安装
@@ -24,6 +27,9 @@ const router = new VueRouter({
     // 利用props传递参数
     { path: "/home/DoloadInfo/:id", component: DoloadInfo, props: true },
     { path: "/home/search", component: Search },
+    { path: "/home/shop", component: Shop },
+    { path: "/home/shopinfo/:id", component: Shopinfo, props: true },
+    { path: "/home/shopdec/:id", component: Shopdec, props: true },
   ],
   linkActiveClass: "mui-active", //设置路由被激活时的类名(点击等)
 });

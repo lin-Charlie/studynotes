@@ -1,12 +1,12 @@
 <template>
   <div>
-    <mt-swipe :auto="4000">
-      <mt-swipe-item v-for="(item, i) in imgInfo" :key="i">
-        <img :src="item.url" alt />
-      </mt-swipe-item>
-    </mt-swipe>
+    <!-- 通过属性绑定父子组件传递参数 -->
+    <swiper :imageInfo="imageInfo" :imgName="'url'"></swiper>
     <router-view></router-view>
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_2059638_62wtfjp05tc.css" />
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/font_2059638_62wtfjp05tc.css"
+    />
     <ul class="mui-table-view mui-grid-view mui-grid-9">
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <a href="#">
@@ -27,10 +27,10 @@
         </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-        <a href="#">
+        <router-link to="/home/shop">
           <span class="mui-icon mui-icon-gear"></span>
           <div class="mui-media-body">Setting</div>
-        </a>
+        </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <a href="#">
@@ -49,11 +49,16 @@
 </template>
 
 <script>
+import swiper from "../sub-component/swiper.vue";
 export default {
   data() {
     return {
-      imgInfo: [], //请求得到的数据
+      imageInfo: [], //请求得到的数据
     };
+  },
+  // 注册子组件
+  components: {
+    swiper,
   },
   created() {
     this.getImg();
@@ -67,38 +72,14 @@ export default {
         // params: {},
       });
       console.log(data);
-      if (data) this.imgInfo = data.img;
-      console.log(this.imgInfo);
+      if (data) this.imageInfo = data.img;
+      console.log(this.imageInfo);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.mint-swipe {
-  height: 250px;
-  .mint-swipe-item {
-    img {
-      width: 100%;
-      height: 100%;
-    }
-    &:nth-child(1) {
-      background-color: aqua;
-      // background: url("../../../src/img/1.jpg");
-      // background-size: cover;
-    }
-    &:nth-child(2) {
-      background-color: rgb(47, 168, 132);
-      // background: url("../../../src/img/2.jpg");
-      // background-size: cover;
-    }
-    &:nth-child(3) {
-      background-color: rgb(151, 170, 46);
-      // background: url("../../../src/img/8.jpg");
-      // background-size: cover;
-    }
-  }
-}
 .mui-grid-view {
   li {
     img {

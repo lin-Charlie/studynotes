@@ -1,5 +1,26 @@
 // 注意：这里的vue和网页中引用的vue不同
 import Vue from "vue";
+// 导入vuex
+import Vuex from "vuex";
+// 安装vuex
+Vue.use(Vuex);
+
+//创建一个公共的状态对象
+const store = new Vuex.Store({
+  // state可以看做Vue中的data
+  state: {
+    // 这里面存储的就是需要共享的数据
+    count: 0,
+    // 这样全局就有了一个count值
+  },
+});
+
+new Vue({
+  el: "",
+  data: {},
+  store, //将创建的共享状态对象挂载到Vue实例上，
+  // 这样所有组件就可以直接从store中获取全部数据
+});
 
 // 导入全局配置
 import "./globalConfig.js";
