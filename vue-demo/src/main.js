@@ -5,22 +5,12 @@ import Vuex from "vuex";
 // 安装vuex
 Vue.use(Vuex);
 
-//创建一个公共的状态对象
-const store = new Vuex.Store({
-  // state可以看做Vue中的data
-  state: {
-    // 这里面存储的就是需要共享的数据
-    count: 0,
-    // 这样全局就有了一个count值
-  },
-});
-
-new Vue({
+/*new Vue({
   el: "",
   data: {},
   store, //将创建的共享状态对象挂载到Vue实例上，
   // 这样所有组件就可以直接从store中获取全部数据
-});
+});*/
 
 // 导入全局配置
 import "./globalConfig.js";
@@ -28,6 +18,9 @@ import "./globalConfig.js";
 // 导入路由对象
 import App from "./components/App.vue";
 import router from "./router.js";
+
+// 导入全局状态管理器
+import store from "./store.js";
 
 // 定义全局时间过滤器
 // Vue.filter("timeFormat", function(datastr,formatData) {
@@ -43,4 +36,5 @@ const vm = new Vue({
   render: (c) => c(App),
   // 使用render渲染的组件为根组件，将来其他组件只能在app内部中去渲染
   router,
+  store,
 });

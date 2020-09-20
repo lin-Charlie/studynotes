@@ -19,7 +19,7 @@
       </router-link>
       <router-link class="my-tab-item" to="/message">
         <span class="mui-icon mui-icon-email">
-          <span class="mui-badge" id="numball">0</span>
+          <span class="mui-badge" id="numball">{{ totalCount }}</span>
         </span>
         <span class="mui-tab-label">消息</span>
       </router-link>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -47,6 +48,9 @@ export default {
       // 回退上次路由
       this.$router.go(-1);
     },
+  },
+  computed: {
+    ...mapGetters(["totalCount"]),
   },
   created() {
     if (this.$route.path == "/home") {

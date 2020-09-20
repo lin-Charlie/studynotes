@@ -2,11 +2,7 @@
   <div>
     <h3>商品详情---{{ id }}</h3>
     <!-- 钩子函数动画都是通过事件绑定机制绑定到transtion上 -->
-    <transition
-      @before-enter="beforeEnter"
-      @enter="Enter"
-      @after-enter="afterEnter"
-    >
+    <transition @before-enter="beforeEnter" @enter="Enter" @after-enter="afterEnter">
       <div class="ball" v-show="flag"></div>
     </transition>
 
@@ -20,24 +16,23 @@
     </div>
     <!-- 购买界面 -->
     <div class="mui-card">
-      <div class="mui-card-header">
-        {{ shopInfo.name }}
-      </div>
+      <div class="mui-card-header">{{ shopInfo.name }}</div>
       <div class="mui-card-content">
         <div class="mui-card-content-inner">
           <p>
-            市场价<span style="margin-right:10px;text-decoration: line-through;"
-              >￥6666</span
-            >
-            销售价<span style="font-size:16px;color:red;font-weight:bold">
-              {{ shopInfo.value }}</span
-            >
+            市场价
+            <span style="margin-right:10px;text-decoration: line-through;">￥6666</span>
+            销售价
+            <span
+              style="font-size:16px;color:red;font-weight:bold"
+            >{{ shopInfo.value }}</span>
           </p>
-          <p>购买数量：<numbox @func="getSelectNum"></numbox></p>
+          <p>
+            购买数量：
+            <numbox @func="getSelectNum"></numbox>
+          </p>
           <mt-button type="primary" size="small">立即购买</mt-button>
-          <mt-button type="danger" size="small" @click="addShop"
-            >加入购物车</mt-button
-          >
+          <mt-button type="danger" size="small" @click="addShop">加入购物车</mt-button>
         </div>
       </div>
     </div>
@@ -53,9 +48,7 @@
       </div>
       <div class="mui-card-footer introduce">
         <!-- 编程式导航：使用JS代码实现跳转 -->
-        <mt-button type="primary" size="large" plain @click="goDec"
-          >图文详情</mt-button
-        >
+        <mt-button type="primary" size="large" plain @click="goDec">图文详情</mt-button>
         <mt-button type="danger" size="large" plain>商品评论</mt-button>
       </div>
     </div>
@@ -65,13 +58,14 @@
 <script>
 import swiper from "../sub-component/swiper.vue";
 import numbox from "../sub-component/numbox.vue";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
       imageInfo: [],
       shopInfo: [],
       flag: false,
-      selectNum: 0,
+      selectNum: 1,
     };
   },
   components: {
@@ -111,9 +105,23 @@ export default {
       // 编程式导航
       this.$router.push("/home/shopdec/" + this.id);
     },
+
+    // 加入购物车的方法
     addShop() {
       this.flag = !this.flag;
+      // 调用mutation中的方法,向store中添加商品信息
+      this.addToCar({
+        id: this.id,
+        num: this.selectNum,
+        select: false,
+        price: this.shopInfo.value,
+      });
+
+      // console.log(this.shopCar[0]);
     },
+    ...mapMutations(["addToCar"]),
+    ...mapState(["shopCar"]),
+
     beforeEnter(el) {
       // 入场动画之前小球的初始状态
       el.style.transform = "translate(0,0)";
@@ -128,7 +136,7 @@ export default {
       const left = numPosi.left - ballPosi.left;
       const top = numPosi.top - ballPosi.top;
       el.style.transform = "translate(" + left + "px," + top + "px)";
-      el.style.transition = "all 1s ease";
+      el.style.transition = "all 0.3s ease";
       done();
     },
     afterEnter(el) {
