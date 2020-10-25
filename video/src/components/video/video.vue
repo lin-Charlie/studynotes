@@ -286,10 +286,15 @@ export default {
                     this.$el.nextSibling.style.visibility = 'visible'
                     this.$vother.style.visibility = 'visible'
                 },100)
-
             }
-
-
+        },
+        // 请求视频数据
+        async getVideoUrl(){
+            const {data} = await this.$axios({
+                url:"/vms/video/selectById",
+                method:'get'
+            })
+            console.log(data)
         }
     },
     watch: {

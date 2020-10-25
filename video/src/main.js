@@ -9,6 +9,7 @@ router.afterEach(() => {
   document.documentElement.scrollTop = 0;
 });
 
+
 new Vue({
   router,
   render: h => h(App),

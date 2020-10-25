@@ -27,6 +27,18 @@ export default {
             "电视剧","电影","动画","动漫","短视频","体育"]
         }
     },
+    mounted() {
+        this.getVideoUrl()
+    },
+    methods: {
+        async getVideoUrl(){
+            const {data} =await this.$axios({
+                url:"http://172.16.12.10:8080/vms/video/selectById?id=1319940161424904193",
+                method:'get'
+            });
+            console.log(data)
+        }
+    },
 }
 </script>
 

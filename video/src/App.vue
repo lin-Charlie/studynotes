@@ -45,16 +45,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// /deep/ .mint-tabbar{
-//   height:1.4rem;
-//   /deep/ .mint-tab-item{
-//     /deep/.mint-tab-item-icon{
-//       width: 0.6rem;
-//       height: 0.6rem ;
-//     }
-//     /deep/.mint-tab-item-label{
-//         font-size: 13px;
-//     }
-//   }
-// }
+
 </style>

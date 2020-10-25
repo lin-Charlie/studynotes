@@ -16,10 +16,11 @@ import Person from './components/tabbar/person.vue'
 import Home from './components/tabbar/home.vue'
 import Video from './components/video/video.vue'
 import Category from './components/category/category.vue'
+import Serch from './components/category/serch.vue'
 
 
 // 共享组价测试路由
-import Sidebar from './components/sub-components/navbar.vue'
+import Sidebar from './components/sub-components/serchbar.vue'
 const router = new Router({
     routes:[
         {path:'/',redirect:'/home'},//默认路由
@@ -27,6 +28,7 @@ const router = new Router({
         {path:'/person',component:Person},
         {path:"/home/video/:id",component:Video,props:true},
         {path:"/home/category/:info",component:Category,props:true},
+        {path:"/home/serch",component:Serch},
 
 
         // 共享组价测试路由

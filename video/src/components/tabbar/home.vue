@@ -1,14 +1,6 @@
 <template>
   <div class="hello">
-    <!-- <div class="mui-input-row mui-search">
-      <input type="search" class="mui-input-clear" placeholder="妖精的尾巴">
-    </div> -->
-    <div class="header">
-        <div class="header-serch" >
-            <input type="text" placeholder="妖精的尾巴">
-            <img src="../../assets/serch.png" alt="">
-        </div>   
-    </div>
+    <serchbar @touchstart.native ="toSerch()"></serchbar>
     <navbar></navbar>
     <div class="content">
         <div class="recommended-video">
@@ -26,6 +18,7 @@
 <script>
 import videoitem from '../sub-components/videoitem.vue'
 import navbar from '../sub-components/navbar.vue'
+import serchbar from '../sub-components/serchbar.vue'
 export default {
     data(){
         return{
@@ -35,6 +28,12 @@ export default {
     components:{
         videoitem,
         navbar,
+        serchbar,
+    },
+    methods: {
+        toSerch(){
+            this.$router.push('/home/serch')
+        }
     },
 }
 </script>
@@ -47,38 +46,6 @@ export default {
 }
 .hello{
     margin-bottom: 1.5rem;
-    .header{
-        z-index: 99;
-        background-color: rgb(140,152,204);
-        padding: 0.3rem 0.3rem;
-        height: 1.5rem;
-        width: 100%;
-        .header-serch{
-            height: 1rem;
-            width: 98%;
-            margin: 0 auto;
-            // border: 1px solid;
-            input{
-                height: 1rem;
-                width: 98%;
-                font-size: 13px;
-                margin-bottom: 0;
-                background-color:rgb(220, 220, 220);
-                border-top-left-radius: 0.5rem;
-                border-top-right-radius: 0.5rem;
-                border-bottom-right-radius: 0.5rem;
-                border-bottom-left-radius: 0.5rem;
-            }
-            img{
-                position: absolute;
-                top: 0.5rem;
-                right: 1rem;
-                width: 0.6rem;
-                height: 0.6rem;
-                opacity: 0.5;
-            }
-        }
-    }
     .content{
         // margin-top: 5rem;
         .recommended-video{

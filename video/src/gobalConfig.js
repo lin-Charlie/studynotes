@@ -21,5 +21,5 @@ import axios from "axios";
 // 将axios挂载到Vue原型上
 Vue.prototype.$axios = axios;
 axios.create({
-//   baseURL: "http://127.0.0.1:3000/", //设置默认根路径
+//   baseURL: "http://172.16.12.10:8080/", //设置默认根路径
 });
