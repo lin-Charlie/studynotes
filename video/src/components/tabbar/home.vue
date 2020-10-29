@@ -9,31 +9,53 @@
         <div class="videoname">
             <h1>视频总览</h1>
         </div>
-        <videoitem></videoitem>
+        <videoitem :video = videoInfo></videoitem>
+        <morebtn @touchstart.native="more()"></morebtn>
     </div>
     
   </div>
 </template>
-
 <script>
 import videoitem from '../sub-components/videoitem.vue'
 import navbar from '../sub-components/navbar.vue'
 import serchbar from '../sub-components/serchbar.vue'
+import morebtn from '../sub-components/morebtn.vue'
 export default {
     data(){
         return{
             flag:false,
+            videoInfo:[],
+            index:1
         }
     },
     components:{
         videoitem,
         navbar,
         serchbar,
+        morebtn,
+    },
+    mounted() {
+        this.getVideoUrl(this.index)
     },
     methods: {
         toSerch(){
             this.$router.push('/home/serch')
-        }
+        },
+        // 分页展示
+        more(){
+            this.index += this.index
+            this.getVideoUrl(this.index)
+        },
+        // 获取视频信息
+        async getVideoUrl(index){
+            if(!this.flag){
+                const {data} =await this.$axios({
+                    url:'/vms/video/vedioList?index='+index,
+                    method:'get'
+                });
+                this.videoInfo = this.videoInfo.concat(data.data)
+            }
+        },
     },
 }
 </script>
@@ -49,8 +71,8 @@ export default {
     .content{
         // margin-top: 5rem;
         .recommended-video{
-            margin: 0.5rem auto;
-            width: 80%;
+            margin: 0.3rem 0.3rem;
+            width: 9.4rem;
             img{
                 width: 100%;
             }
@@ -63,7 +85,7 @@ export default {
             }
         }
     }
-  
+
 
 }
 </style>

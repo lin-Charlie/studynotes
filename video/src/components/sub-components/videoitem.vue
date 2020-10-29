@@ -1,9 +1,14 @@
 <template>
     <div>
         <ul class="video-item">
-            <router-link :to="'/home/video/' + item.id" tag="li" class='video' v-for="(item,index) in videoInfo" :key="index">
-                <img :src="item.url" alt="">
-                <p class="videoinfo">{{item.name}}</p>
+<!-- 根据Vue2.0官方文档关于父子组件通讯的原则，父组件通过prop传递数据给子组件，
+子组件触发事件给父组件。但父组件想在子组件上监听自己的click的话，需要加上native修饰符。
+所以如果在想要在router-link上添加事件的话需要@click.native这样写 -->
+            <router-link :to="'/home/video/' + item.videoId" tag="li" class='video' 
+            v-for="(item,index) in videoInfo" :key="index"
+            @click.native="setStorage(item)">
+                <img :src="item.videoPicServerUrl" alt="">
+                <p class="videoinfo">{{item.videoName}}</p>
             </router-link>
         </ul>
     </div>
@@ -23,20 +28,25 @@ export default {
                 {id:'7',name:"妖精的尾巴",url:require('../../assets/video.png')},
                 {id:'8',name:"妖精的尾巴",url:require('../../assets/video.png')},
             ],
-            category:["精选","电视剧","电影","动画","动漫","短视频","体育","精选",
-            "电视剧","电影","动画","动漫","短视频","体育"]
+            
+            // videorecord:[]
         }
     },
-    mounted() {
-        this.getVideoUrl()
-    },
+    props:['video'],
     methods: {
-        async getVideoUrl(){
-            const {data} =await this.$axios({
-                url:"http://172.16.12.10:8080/vms/video/selectById?id=1319940161424904193",
-                method:'get'
-            });
-            console.log(data)
+        setStorage(info){
+            const video = JSON.parse(localStorage.getItem('videorecord'))||[]
+            video.push(info)
+            if(video[0]==null){
+                this.video.splice(0,1)
+            }
+            localStorage.setItem('videorecord',JSON.stringify(video))
+        },
+    },
+    watch: {
+        video(val){
+            this.videoInfo = val
+            console.log(this.videoInfo)
         }
     },
 }
@@ -45,19 +55,20 @@ export default {
 <style lang="less" scoped>
 .video-item{
     box-sizing: border-box;
-    padding: 0 5px;
+    padding: 0 0.3rem;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     list-style: none;
     .video{
-        width: 49%;
+        width: 48%;
         display:inline-block;
         img{
             width: 100%;
+            height: 5rem;
         }
         .videoinfo{
-            margin: 0.2rem 0;
+            margin-bottom: 0.3rem;
             font-size: 12px;
             opacity: 0.7;
         }

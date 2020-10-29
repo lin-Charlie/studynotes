@@ -2,13 +2,13 @@
     <div>
         <div class="nav">
             <ul class="ul-video category1" ref="ulcategory">
-                <router-link :to="'/home/category/'+item" tag="li" v-for="(item,index) in category" :key="index">
-                    <span class="categoryInfo">{{item}}</span>
+                <router-link :to="'/home/category/'+item.name" tag="li" v-for="(item,index) in category" :key="index">
+                    <span class="categoryInfo">{{item.name}}</span>
                 </router-link>
             </ul>
             <ul class="ul-video category2" ref="ulcategory2">
-                <router-link :to="'/home/category/'+item" tag="li" v-for="(item,index) in category" :key="index" @touchstart="toVideoCategory($event)">
-                    <span class="categoryInfo">{{item}}</span>
+                <router-link :to="'/home/category/'+item.name" tag="li" v-for="(item,index) in category" :key="index">
+                    <span class="categoryInfo">{{item.name}}</span>
                 </router-link>
             </ul>
             <div class="img-video-category" @click="changeUl"></div>
@@ -20,15 +20,15 @@
 export default {
     data() {
         return {
-            category:["精选","电视剧","电影","动画","动漫","短视频","体育","精选",
-            "电视剧","电影","动画","动漫","短视频","体育"],
+            category:["精选","电影","动画","动漫","短视频","体育","精选",
+            "电视剧","电影","动画","动漫","短视频","体育","电视剧"],
             html:null,
         }
     },
+    mounted() {
+        this.getVideoTag()
+    },
     methods: {
-        toVideoCategory(e){
-            this.html = e.path[0].innerHTML;
-        },
         changeUl(){
             // console.log(this)
             if(this.flag!=true){
@@ -40,7 +40,13 @@ export default {
                 this.$refs.ulcategory2.style.display='none'
                 this.flag = !this.flag
             }
-            
+        },
+        getVideoTag(){
+            this.$axios.get('/vms/dict/list').then((res)=>{
+                this.category = res.data.data
+            }).catch((err)=>{
+                console.log(err)
+            })
         }
     },
 }
@@ -51,22 +57,22 @@ export default {
 .ul-video{
     // margin-top: 0.5rem;
     list-style: none;
-    padding: 0 0.3rem;
+    padding-left:0.3rem;
     overflow: hidden;
     // height: 1.6rem;
-    width: 90%;
+    width: 100%;
     li{
         display:inline-block;
         float: left;
         // margin-left: 20px;
-        margin: 0 0.3rem;
-        margin-top: 0.1rem;
-        width: 1rem;
-        height: 0.8rem;
+        margin-right:0.3rem;
+        width: 1.2rem;
+        height: 1rem;
         .categoryInfo{
+            line-height: 1rem;
             white-space: nowrap;
             // margin: 0 auto;
-            font-size: 15px;
+            font-size: 16px;
             color: white;
         }
     }
@@ -79,7 +85,7 @@ export default {
     width: 100%;
     display: flex;
     .category1{
-        height: 0.7rem;
+        height: 1rem;
         display: block;
     }
     .category2{
@@ -88,7 +94,7 @@ export default {
     .img-video-category{
         // position: fixed;
         position: relative;
-        top: 0.3rem;
+        top: 0.1rem;
         right: 0.3rem;
         width: 0.8rem;
         height: 0.8rem;

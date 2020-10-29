@@ -9,6 +9,9 @@
     </div>
 </template>
 <style lang="less" scoped>
+*{
+    margin: 0;
+}
 .header{
         z-index: 99;
         background-color: rgb(140,152,204);
@@ -17,12 +20,12 @@
         width: 100%;
         .header-serch{
             height: 1rem;
-            width: 98%;
+            width: 9.4rem;
             margin: 0 auto;
             // border: 1px solid;
             input{
                 height: 1rem;
-                width: 98%;
+                width: 100%;
                 font-size: 13px;
                 margin-bottom: 0;
                 background-color:rgb(220, 220, 220);
