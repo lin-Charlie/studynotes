@@ -65,7 +65,7 @@ client.connect((err) => {
   let db = client.db(dbname);
   // 查找数据
   db.collection("user")
-    .find({ age: 21 })
+    .find(/*{ age: 21 }*/)
     .toArray((err, data) => {
       if (err) {
         console.log(err);
