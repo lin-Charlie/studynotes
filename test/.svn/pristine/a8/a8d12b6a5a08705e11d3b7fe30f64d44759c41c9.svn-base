@@ -1,0 +1,487 @@
+<template>
+  <div class="container">
+    <Dialog :config="dialogConfig">
+      <template slot="container">
+        <el-form
+          :model="addDic"
+          ref="ruleForm"
+          label-position="right"
+          :rules="rules"
+          label-width="30%"
+          :inline="true"
+        >
+          <el-form-item label="名称：" prop="name">
+            <el-input v-model="addDic.name"></el-input>
+          </el-form-item>
+          <el-form-item label="数据库名称：" prop="tableField">
+            <el-input v-model="addDic.tableField" :disabled='addDic.id!==""'></el-input>
+          </el-form-item>
+          <el-form-item label="数据类型：" prop="typeName">
+            <el-select v-model="addDic.type" placeholder="请选择">
+              <el-option label="字段" value="0">
+                <span style="color: rgba(0,0,0,0.3); font-size: 10px"
+                  >字段</span
+                >
+              </el-option>
+              <el-option label="数值" value="1">
+                <span style="color: rgba(0,0,0,0.3); font-size: 10px"
+                  >数值</span
+                >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="采集类型：" prop="collectTypeName">
+            <el-select v-model="addDic.collectType" placeholder="请选择">
+              <el-option label="人工录入" value="0">
+                <span style="color: rgba(0,0,0,0.3); font-size: 10px"
+                  >人工录入</span
+                >
+              </el-option>
+              <el-option label="自动录入" value="1">
+                <span style="color: rgba(0,0,0,0.3); font-size: 10px"
+                  >自动录入</span
+                >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="长度：" prop="length">
+            <el-input v-model="addDic.length"></el-input>
+          </el-form-item>
+          <el-form-item label="精度：" prop="precision">
+            <el-input v-model="addDic.precision"></el-input>
+          </el-form-item>
+          <el-form-item label="最小值：" prop="minValue">
+            <el-input v-model="addDic.minValue"></el-input>
+          </el-form-item>
+          <el-form-item label="最大值：" prop="maxValue">
+            <el-input v-model="addDic.maxValue"></el-input>
+          </el-form-item>
+          <el-form-item label="单位：" prop="unit">
+            <el-input v-model="addDic.unit"></el-input>
+          </el-form-item>
+          <el-form-item label="备注：">
+            <el-input v-model="addDic.remark" type="textarea"></el-input>
+          </el-form-item>
+        </el-form>
+      </template>
+      <template slot="footer">
+        <el-button type="primary" plain @click="add(false, 'ruleForm')"
+          >取消</el-button
+        >
+        <el-button type="primary" @click="add(true, 'ruleForm')"
+          >保存</el-button
+        >
+      </template>
+    </Dialog>
+    <div class="serch_bar">
+      <div class="serch_box">
+        <el-select v-model="select" :placeholder="selectList[0].name">
+          <el-option
+            v-for="(item, index) in selectList"
+            :key="index"
+            :label="item.name"
+            :value="index"
+          >
+            <span style="color: rgba(0,0,0,0.3); font-size: 10px">{{
+              item.name
+            }}</span>
+          </el-option>
+        </el-select>
+        <el-input
+          placeholder="数据项名称"
+          v-model="serchData"
+          clearable
+          class="serch_input"
+        >
+        </el-input>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="serchDic"
+        ></el-button>
+      </div>
+      <el-button type="primary" plain @click="isDialog">新增+</el-button>
+    </div>
+    <div class="table_box">
+      <commonTable :init="tableInit" :tableData="tableData">
+        <template slot="operate" slot-scope="scope">
+          <el-button type="success" @click="changeDic(scope.row)"
+            >修改</el-button
+          >
+          <el-button type="info" @click="deleteDic(scope.row)">删除</el-button>
+        </template>
+      </commonTable>
+    </div>
+    <pagination :pageParams="pageParams" :total="pageParams.total"></pagination>
+  </div>
+</template>
+
+<script>
+import commonTable from "@/components/table/commonTable.vue";
+import pagination from "@/components/table/pagination.vue";
+import Dialog from "@/components/Dialog/Dialog.vue";
+export default {
+  data() {
+    return {
+      selectList: [
+        { name: "管道日数据" },
+        { name: "管道小时数据" },
+        { name: "天然气用户供气日数据" },
+        { name: "管线缓蚀加注日数据" },
+        { name: "脱水储量日数据" },
+      ],
+      select: null,
+      serchData: null,
+      tableInit: {
+        options: [
+          { label: "名称", prop: "name" },
+          { label: "数据库名称", prop: "tableField" },
+          {
+            label: "数据类型",
+            prop: "type",
+            format: (row) => {
+              return row.type == 0 ? "字段" : "数值";
+            },
+          },
+          {
+            label: "采集类型",
+            prop: "collectType",
+            format: (row) => {
+              return row.collectType == 0 ? "人工录入" : "自动录入";
+            },
+          },
+          { label: "长度", prop: "length", width: "70px" },
+          { label: "精度", prop: "precision", width: "70px" },
+          { label: "最小值", prop: "minValue" },
+          { label: "最大值", prop: "maxValue" },
+          { label: "单位", prop: "unit" },
+          { label: "备注", prop: "remark" },
+          { label: "操作", prop: "operate", width: "200px" },
+        ],
+        config: {
+          //行类名
+          rowClassName(row) {
+            if ((row.rowIndex + 1) % 2 == 0) {
+              return "evenCows";
+            } else {
+              return "oddCows";
+            }
+          },
+        },
+      },
+      tableData: [
+        {
+          collectTypeName: "手动录入",
+          dataType: "037320cd-27ae-4e0f-a462-1a48dbdad72e",
+          id: "487e75b0a4d556853545cf61638340b2",
+          length: 16,
+          maxValue: "9.9999999E7",
+          minValue: "0.0",
+          name: "日输气量",
+          precision: "2",
+          remark: "",
+          tableField: "VALUE_DAY",
+          typeName: "数值",
+          unit: "方",
+        },
+        {
+          collectTypeName: "手动录入",
+          dataType: "037320cd-27ae-4e0f-a462-1a48dbdad72e",
+          id: "487e75b0a4d556853545cf61638340b3",
+          length: 16,
+          maxValue: "9.9999999E7",
+          minValue: "0.0",
+          name: "日输气量2",
+          precision: "2",
+          remark: "",
+          tableField: "VALUE_DAY",
+          typeName: "数值",
+          unit: "方",
+        },
+        {
+          collectTypeName: "手动录入",
+          dataType: "037320cd-27ae-4e0f-a462-1a48dbdad72e",
+          id: "487e75b0a4d556853545cf61638340b4",
+          length: 16,
+          maxValue: "9.9999999E7",
+          minValue: "0.0",
+          name: "日输气量3",
+          precision: "2",
+          remark: "",
+          tableField: "VALUE_DAY",
+          typeName: "数值",
+          unit: "方",
+        },
+        {
+          collectTypeName: "手动录入",
+          dataType: "037320cd-27ae-4e0f-a462-1a48dbdad72e",
+          id: "487e75b0a4d556853545cf61638340b5",
+          length: 16,
+          maxValue: "9.9999999E7",
+          minValue: "0.0",
+          name: "日输气量4",
+          precision: "2",
+          remark: "",
+          tableField: "VALUE_DAY",
+          typeName: "数值",
+          unit: "方",
+        },
+      ],
+      pageParams: {
+        pageSize: 10,
+        pageNum: 1,
+        total: 60,
+      },
+      dialogConfig: {
+        createDialog: false,
+        title: "数据字典新增",
+      },
+      // 表单规则
+      rules: {
+        name: [{ required: true, message: "请输入数据名称", trigger: "blur" }],
+        tableField: [
+          { required: true, message: "请输入数据库名称", trigger: "blur" },
+        ],
+        type: [
+          { required: true, message: "请选择数据类型", trigger: "change" },
+        ],
+        collectType: [
+          { required: true, message: "请选择采集类型", trigger: "change" },
+        ],
+        length: [{ required: true, message: "请输入长度", trigger: "blur" }],
+        precision: [{ required: true, message: "请输入精度", trigger: "blur" }],
+        minValue: [
+          { required: true, message: "请输入最小值", trigger: "blur" },
+        ],
+        maxValue: [
+          { required: true, message: "请输入最大值", trigger: "blur" },
+        ],
+        unit: [{ required: true, message: "请输入单位", trigger: "blur" }],
+      },
+      // 新增数据字典
+      addDic: {
+        name: "",
+        tableField: "",
+        type: "",
+        collectType: "",
+        length: "",
+        precision: "",
+        minValue: "",
+        maxValue: "",
+        unit: "",
+        remark: "",
+        id: "",
+        createTime: "",
+        creator: "",
+        updateTime: "",
+        dataType: "",
+        deleteStatus: 0,
+        updater: "",
+      },
+    };
+  },
+  components: { commonTable, pagination, Dialog },
+  methods: {
+    // 显示弹窗
+    isDialog() {
+      this.dialogConfig.createDialog = !this.dialogConfig.createDialog;
+    },
+    // 保存数据
+    add(flag, element) {
+      // 区分保存取消
+      if (flag) {
+        // console.log(this.$refs[element]);
+        this.$refs[element].validate(async(valid) => {
+          // 判断输入是否合格
+          if (valid) {
+            // 数据操作,有id则为修改，无为新增
+            if (this.addDic.id) {
+              let info = {
+                url: "/management/dictionary/update",
+                method: "put",
+                successinfo: "修改成功",
+                errinfo: "修改失败",
+              };
+              this.addDic.type = this.addDic.type=="数值"?1:this.addDic.type=="字段"?0:this.addDic.type;
+              this.addDic.collectType = this.addDic.collectType=="人工录入"?0:this.addDic.collectType=="自动录入"?1:this.addDic.collectType;
+              console.log(this.addDic.type,this.addDic.collectType)
+              this.changeData(info);
+              // this.getTableData(1, 10);
+            } else {
+              console.log(this.addDic.type)
+              let info = {
+                url: "/management/dictionary/save",
+                method: "post",
+                successinfo: "新增成功",
+                errinfo: "新增失败",
+              };
+              this.addDic.dataType = this.selectList[this.select||0].id
+              this.addDic.deleteStatus = 0
+              this.changeData(info);
+              // this.getTableData(1, 10);
+            }
+            this.dialogConfig.createDialog = !this.dialogConfig.createDialog;
+          } else {
+            return false;
+          }
+        });
+      } else {
+        this.dialogConfig.createDialog = !this.dialogConfig.createDialog;
+      }
+      // 重置对象
+      for(let key in this.addDic){
+        this.addDic[key] = ""
+      }
+    },
+    // 修改数据字典
+    changeDic(info) {
+      for (let key in this.addDic) {
+        for (let val in info) {
+          if (key == val) {
+            info.type = info.type==0?"字段":"数值"
+            info.collectType = info.collectType==0?"人工录入":"自动录入"
+            this.addDic[key] = info[val];
+          }
+        }
+      }
+      // let dataFieldName = this.$refs.datafieldinput
+      // dataFieldName.setAttribute("disabled","true")
+      // console.log(this.$refs);
+
+      this.dialogConfig.createDialog = !this.dialogConfig.createDialog;
+    },
+    // 删除字典
+    deleteDic(info) {
+      this.tableData.forEach((item, index) => {
+        if (item.id == info.id) {
+          this.tableData.splice(index, 1);
+          this.$axios({
+            url: `/management/dictionary/deleteById/${info.id}`,
+            method: "delete",
+          })
+            .then((res) => {
+              this.getTableData(this.pageParams.pageNum, this.pageParams.pageSize,this.selectList[this.select||0].id)
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    },
+    // 搜索数据
+    async serchDic() {                   
+      // 搜索值为空则显示全部
+      if(this.serchData){
+        let data = await this.$axios({
+          url:`/management/dictionary/findPoDataItem/${this.pageParams.pageNum}
+          /${this.pageParams.pageSize}/${this.selectList[this.select||0].id}/${this.serchData}`,
+          method:"get"
+        })
+        if(data.data.data.records.length!=0){
+          this.tableData = data.data.data.records || this.tableData;
+          this.pageParams.total = Number(data.data.data.total)
+        }else{
+          this.$message.error("暂无数据");
+        }
+      }else{
+        this.getTableData(this.pageParams.pageNum, this.pageParams.pageSize,this.selectList[this.select].id)
+      }
+      this.serchData = ""
+    },
+    // 获取数据字典信息
+    async getTableData(page, size,tableId) {
+        // 获取分页及总数
+        let  data  = await this.$axios({
+          url: `/management/dictionary/queryPoDataItem/${page}/${size}/${tableId}`,
+          method: "get",
+        });
+        this.pageParams.total = Number(data.data.data.total)
+        this.tableData = data.data.data.records || this.tableData;
+    },
+    // 异步修改数据
+    async changeData(info) {
+      this.$axios({ 
+        url: info.url,
+        method: info.method,
+        data: this.addDic,
+        // data: JSON.stringify(this.addDic),
+      })
+        .then((res) => {
+          if (info.successinfo) {
+            this.$message({
+              message: info.successinfo,
+              type: "success",
+            });
+          }
+          // 更新页面数据
+          this.getTableData(this.pageParams.pageNum, this.pageParams.pageSize,this.selectList[this.select||0].id);
+          return res;
+        })
+        .catch((err) => {
+          // console.log(err)
+          if (info.errinfo) {
+            this.$message.error(info.errinfo + ":" + err);
+          }
+        });
+    },
+    // 获取选择框数据
+    async getDataTable(){
+      this.$axios({
+        url:"/management/dictionaryType/findAllPoDataType",
+        method:"get"
+      }).then((res)=>{
+        console.log(res.data.data)
+        this.selectList = res.data.data
+      }).catch((err)=>{
+        console.log(err)
+      })
+      
+    },
+  },
+  created() {
+    this.getDataTable();
+    this.getTableData(1, 10,"037320cd-27ae-4e0f-a462-1a48dbdad72e");
+  },
+  watch: {
+    "pageParams.pageNum": {
+      handler(newVal, oldVal) {
+        this.getTableData(newVal, this.pageParams.pageSize);
+      },
+    },
+    "pageParams.pageSize": {
+      handler(newVal, oldVal) {
+        this.getTableData(this.pageParams.pageNum, newVal);
+      },
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+/deep/ .el-button--primary.is-plain:hover {
+  color: #409eff;
+  background: #ecf5ff;
+  border-color: #b3d8ff;
+}
+.el-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  width: 100%;
+  .el-form-item {
+    flex: 35%;
+  }
+}
+.container {
+  padding: 10px;
+  .serch_bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    .serch_input {
+      width: 200px;
+      margin: 0 10px;
+    }
+  }
+}
+</style>

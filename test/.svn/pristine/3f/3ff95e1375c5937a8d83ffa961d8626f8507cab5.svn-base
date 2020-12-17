@@ -1,0 +1,225 @@
+<template>
+    <div class="container">
+        <addDialog
+        :options="addOptions"></addDialog>
+        <trackDialog
+        :options="trackOptions"></trackDialog>
+        <endDialog
+        :options="endOptions"></endDialog>
+        <div class="serch_bar">
+            <div class="serch_box">
+                <el-date-picker
+                v-model="createTime"
+                value-format="yyyy-MM-dd HH:mm"
+                format="yyyy-MM-dd HH:mm"
+                type="datetime"
+                placeholder="创建时间">
+                </el-date-picker>
+                <el-date-picker
+                v-model="planTime"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm"
+                format="yyyy-MM-dd HH:mm"
+                placeholder="有效时间">
+                </el-date-picker>
+                <el-select v-model="selectVal" placeholder="状态">
+                    <el-option
+                    v-for="(item,index) in selectList"
+                    :key="index"
+                    :label="item"
+                    :value="index">
+                    <span style="color: rgba(0,0,0,0.3); font-size: 10px">{{ item }}</span>
+                    </el-option>
+                </el-select>
+                <el-button type="primary" icon="el-icon-search" @click="serchDis"></el-button>
+            </div>
+            <el-button type="primary" plain @click="isDialog">添加指令+</el-button>
+        </div>
+        <div class="table_box">
+            <commonTable
+            :init="tableInit"
+            :tableData="tableData">
+                <template slot="operate" slot-scope="scope">
+                    <el-button type="success">跟踪</el-button>
+                    <el-button type="info" v-if="scope.row.state==0" >终止</el-button>
+                </template>
+            </commonTable>
+        </div>
+        <pagination
+        :pageParams="pageParams"
+        :total="pageParams.total"></pagination>
+    </div>
+</template>
+
+
+<script>
+import commonTable from "@/components/table/commonTable.vue"
+import pagination from "@/components/table/pagination.vue"
+import addDialog from "@/components/Dialog/addInstruct.vue"
+import trackDialog from "@/components/Dialog/trackInstruct.vue"
+import endDialog from "@/components/Dialog/endInstruct.vue"
+export default {
+    data(){
+        return{
+            selectList:["指令下达","指令终止","已完成"],
+            selectVal:'',
+            createTime:'',
+            planTime:'',
+            // 弹窗配置
+            addOptions:{
+                dialogVisible:false,
+                tittle:"新增指令",
+                ruleForm:{
+                    name:'',
+                    note:'',
+                    planTime:'',
+                    stationId:''
+                },
+                rules:{
+                    name:[{required:true,message:"指令名称不能为空",trigger:'blur'}],
+                    note:[{required:true,message:"指令描述不能为空",trigger:'blur'}],
+                    planTime:[{required:true,message:"请选择完成时间",trigger:'change'}],
+                    stationId:[{required:true,message:"执行场站不能为空",trigger:'blur'}],
+                }
+            },
+            trackOptions:{
+
+            },
+            endOptions:{}, 
+            tableInit:{
+                options:[
+                    {label: '指令名称',prop: 'name'},
+                    {label: '执行场站',prop: 'stationName'},
+                    {label: '创建时间',prop: 'createTime'},
+                    {label: '创建人',prop: 'creatorNote'},
+                    {label: '计划完成时间',prop: 'planTime'},
+                    {label: '指令描述',prop: 'note'},
+                    {label: '状态',prop: 'state',
+                    format:row=>{
+                        return row.state==0?"指令下达":row.state==1?"指令终止":"已完成"}
+                    },
+                    {label: '操作',prop: 'operate',width:"200"}],
+                config:{
+                    index:{
+                        method: (val)=>val+1,
+                    },
+                    rowClassName(row){
+                        if((row.rowIndex+1)%2==0){
+                            return "evenCows"
+                        }else{
+                            return "oddCows"
+                        }
+                    },
+                }
+            },
+            tableData:[
+                {completeTime: "2020-12-04 17:40",
+                createTime: "2020-12-04 17:39",
+                creator: "4cfb5f1e-0ce4-410a-a8ba-aedfe5bbc552",
+                creatorNote: "生产测试用户",
+                executePerson: "95452db3-3765-4fc6-8d70-fc8db3d887e8",
+                executePersonNote: "中江首站班长",
+                explain: "123213",
+                id: "7fb27c740e2ceeba2f3108e58fe53098",
+                list: '',
+                name: "123",
+                note: "21321",
+                orderUnit: "",
+                planTime: "2020-12-04 17:39",
+                state: 2,
+                stationId: "58ca0d19-34ca-43e4-941e-8b60b9d4e319",
+                stationName: "中江首站"},
+                {completeTime: "2020-12-04 17:40",
+                createTime: "2020-12-04 17:39",
+                creator: "4cfb5f1e-0ce4-410a-a8ba-aedfe5bbc552",
+                creatorNote: "生产测试用户",
+                executePerson: "95452db3-3765-4fc6-8d70-fc8db3d887e8",
+                executePersonNote: "中江首站班长",
+                explain: "123213",
+                id: "7fb27c740e2ceeba2f3108e58fe53098",
+                list: '',
+                name: "123",
+                note: "21321",
+                orderUnit: "",
+                planTime: "2020-12-04 17:39",
+                state: 0,
+                stationId: "58ca0d19-34ca-43e4-941e-8b60b9d4e319",
+                stationName: "中江首站"}
+            ],
+            pageParams:{
+                pageNum:1,
+                pageSize:10,
+                total:60
+            }
+        }
+    },
+    components:{commonTable,pagination,addDialog,trackInstruct,endInstruct},
+    created(){
+        this.getInstructData()
+    },
+    methods:{
+        isDialog(){
+            this.dialogOptions.dialogVisible = !this.dialogOptions.dialogVisible
+        },
+        serchDis(){
+
+        },
+        // 获取指令信息
+        async getInstructData(page,size){
+            // 获取全部
+            if(page==null&&size==null){
+                console.log("获取数据")
+                // this.$axios({
+                //     url:`/management/dictionary/findAll`,
+                //     method:"get"
+                // }).then((res)=>{
+                //     console.log(res)
+                // })
+            }else{
+                console.log("获取分页数据")
+                // 获取分页
+                // let {data} = await this.$axios({
+                //     url:`/dictionary/findAll/${page}/${size}`,
+                //     method:"get"
+                // })
+                // this.tableData = data||this.tableData
+            }
+        },
+    },
+    watch:{
+        'pageParams.pageNum':{
+            handler(newVal,oldVal){
+                this.getInstructData(newVal,this.pageParams.pageSize)
+            }
+        },
+        'pageParams.pageSize':{
+            handler(newVal,oldVal){
+                this.getInstructData(this.pageParams.pageNum,newVal)
+            }
+        },
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+/deep/ .el-button--primary.is-plain:hover{
+    color: #409EFF;
+    background: #ecf5ff;
+    border-color: #b3d8ff;
+}
+.container{
+    padding: 10px 20px;
+    .serch_bar{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        .el-input{
+            margin-right: 10px;
+        }
+        .el-select{
+            margin-right: 10px;
+            width: 200px;
+        }
+    }
+}
+</style>

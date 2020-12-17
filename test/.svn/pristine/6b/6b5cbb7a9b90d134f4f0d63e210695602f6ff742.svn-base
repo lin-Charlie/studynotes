@@ -1,0 +1,101 @@
+<template>
+    <div class="login">
+        <div class="wrap">
+            <div class="login_box">
+                <h1>用户登录</h1>
+                <el-form ref="ruleForm" :rules="rules" :model="userinfo" label-width="80px">
+                    <el-form-item prop="name">
+                        <el-input v-model="userinfo.name" placeholder="请输入用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="userinfo.password" placeholder="请输入密码" type="password"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" style="width:96%;height:40px;background-color: rgba(2,88,137,0.8);" round @click="submitForm('ruleForm')">登录</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+        
+    </div>
+</template>
+
+<script>
+export default {
+    data(){
+        return{
+            userinfo:{
+                name:null,
+                password:null
+            },
+            rules:{
+                name:[{required:true,message:" ",trigger:"blur"}],
+                password:[{required:true,message:" ",trigger:"blur"}]
+            }
+        }
+    },
+    methods:{
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    sessionStorage.userinfo = JSON.stringify(this.userinfo)
+                    this.$router.push('/index')
+                } else {
+                     this.$message.error('账号、密码不能为空');
+                    return false;
+                }
+            });
+      },
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@mixin center{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.login{
+    height: 100%;
+    background-color: rgb(2,40,70);
+    .wrap{
+        @include center;
+        // padding: 2%;
+        width: 2.4rem;
+        height: 3rem;
+        box-sizing: content-box;
+        border: 8px solid rgb(108,238,249);
+        border-radius: 12px;
+        .login_box{
+            @include center;
+            width: 96%;
+            height: 96%;
+            background-color: rgba(2,88,137,0.3);
+            h1{
+                text-align: center;
+                margin-top: 14%;
+                color: beige;
+            }
+            /deep/.el-form{
+                position: absolute;
+                left: 38%;
+                top: 50%;
+                transform: translate(-50%,-50%);
+                .el-input__inner{
+                    width: 1.6rem;
+                    height: 40px;
+                    background-color: rgb(7,86,142);
+                    color: #fff; 
+                    margin-bottom: 0.1rem;
+                }
+                .el-input__inner::-webkit-input-placeholder { 
+                    /* WebKit browsers */ 
+                    color: #fff; 
+                }
+            }
+        }
+    }
+}
+</style>

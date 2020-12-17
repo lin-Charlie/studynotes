@@ -1,0 +1,175 @@
+<template>
+  <div class="container">
+    <dealDialog :options="dealOptions"></dealDialog>
+    <div class="serch_bar">
+      <div class="serch_box">
+        <el-date-picker
+          v-model="createTime"
+          value-format="yyyy-MM-dd HH:mm"
+          format="yyyy-MM-dd HH:mm"
+          type="datetime"
+          placeholder="创建时间"
+        >
+        </el-date-picker>
+        <el-date-picker
+          v-model="planTime"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm"
+          format="yyyy-MM-dd HH:mm"
+          placeholder="有效时间"
+        >
+        </el-date-picker>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="serchDis"
+        ></el-button>
+      </div>
+    </div>
+    <div class="table_box">
+      <commonTable :init="tableInit" :tableData="tableData">
+        <template slot="operate" slot-scope="scope">
+          <el-button type="success" @click="todo(scope.row)">执行</el-button>
+        </template>
+      </commonTable>
+    </div>
+    <pagination :pageParams="pageParams" :total="pageParams.total"></pagination>
+  </div>
+</template>
+<script>
+import commonTable from "@/components/table/commonTable.vue";
+import pagination from "@/components/table/pagination.vue";
+import dealDialog from "@/views/components/dealDialog.vue";
+export default {
+  data() {
+    return {
+      createTime: "",
+      planTime: "",
+      dealOptions: {
+        dialogVisible: false,
+        title: "指令处理",
+        details: {
+          name: "",
+          creatorNote: "",
+          createTime: "",
+          planTime: "",
+          note: "",
+          completeTime: "",
+          state: "",
+        },
+        ruleForm: {
+          explain: "",
+        },
+      },
+      tableInit: {
+        options: [
+          { label: "指令名称", prop: "name" },
+          { label: "执行单位", prop: "stationName" },
+          { label: "创建时间", prop: "createTime" },
+          { label: "创建人", prop: "creatorNote" },
+          { label: "计划完成时间", prop: "planTime" },
+          { label: "指令描述", prop: "note" },
+          {
+            label: "状态",
+            prop: "state",
+            format: (row) => {
+              return row.state == 0
+                ? "指令下达"
+                : row.state == 1
+                ? "指令终止"
+                : "已完成";
+            },
+          },
+          { label: "操作", prop: "operate", width: "200" },
+        ],
+        config: {
+          index: {
+            method: (val) => val + 1,
+          },
+          rowClassName(row) {
+            if ((row.rowIndex + 1) % 2 == 0) {
+              return "evenCows";
+            } else {
+              return "oddCows";
+            }
+          },
+        },
+      },
+      tableData: [
+        {
+          completeTime: "2020-12-04 17:40",
+          createTime: "2020-12-04 17:39",
+          creator: "4cfb5f1e-0ce4-410a-a8ba-aedfe5bbc552",
+          creatorNote: "生产测试用户1",
+          executePerson: "95452db3-3765-4fc6-8d70-fc8db3d887e8",
+          executePersonNote: "中江首站班长",
+          explain: "123213",
+          id: "7fb27c740e2ceeba2f3108e58fe53098",
+          list: "",
+          name: "123",
+          note: "21321",
+          orderUnit: "",
+          planTime: "2020-12-04 17:39",
+          state: 0,
+          stationId: "58ca0d19-34ca-43e4-941e-8b60b9d4e319",
+          stationName: "中江首站",
+        },
+        {
+          completeTime: "2020-12-04 17:40",
+          createTime: "2020-12-04 17:39",
+          creator: "4cfb5f1e-0ce4-410a-a8ba-aedfe5bbc552",
+          creatorNote: "生产测试用户2",
+          executePerson: "95452db3-3765-4fc6-8d70-fc8db3d887e8",
+          executePersonNote: "中江首站班长",
+          explain: "123213",
+          id: "7fb27c740e2ceeba2f3108e58fe53098",
+          list: "",
+          name: "123",
+          note: "21321",
+          orderUnit: "",
+          planTime: "2020-12-04 17:39",
+          state: 0,
+          stationId: "58ca0d19-34ca-43e4-941e-8b60b9d4e319",
+          stationName: "中江首站",
+        },
+      ],
+      pageParams: {
+        pageNum: 1,
+        pageSize: 10,
+        total: 60,
+      },
+    };
+  },
+  components: { commonTable, pagination, dealDialog },
+  methods: {
+    // 给弹窗传递点击行的参数
+    todo(row) {
+      for (let key in row) {
+        for (let i in this.dealOptions.details) {
+          if (key == i) {
+            this.dealOptions.details[i] = row[key];
+          }
+        }
+      }
+      this.dealOptions.dialogVisible = true;
+    },
+    serchDis() {},
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.container {
+  padding: 10px 20px;
+  .serch_bar {
+    margin-bottom: 10px;
+    .el-input {
+      margin-right: 10px;
+    }
+    .el-select {
+      margin-right: 10px;
+      width: 200px;
+    }
+  }
+}
+</style>

@@ -1,0 +1,97 @@
+import Vue from "vue"
+import Router from "vue-router"
+Vue.use(Router)
+
+const originalPush = Router.prototype.push
+   Router.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
+const router = new Router({
+    routes:[
+    {
+        path:'/',redirect:"/login"
+    },{
+        path:'/login',
+        name:"login",
+        component:()=>import("@/views/test/login/index.vue"),
+    },{
+        path:'/index', 
+        redirect:"/index/setting", 
+        component:()=>import("@/views/test"),
+        children:[
+        {
+            path:"index/dispatch",
+            name:"dispatch",
+            component: { render: h => h("router-view") },
+            children:[{
+                path:'/index/dispatch/send',
+                name:"send",
+                component:()=>import("@/views/test/dispatch/Issue.vue"),
+                meta:{
+                    tittle:"下发指令",
+                    type:"协同调度",
+                    icon: require("@/assets/images/svg/send.svg"),
+                    activePath:"/index/dispatch/send"
+                }
+            },{
+                path:'/index/dispatch/todo',
+                name:'todo',
+                component:()=>import("@/views/test/dispatch/daiban.vue"),
+                meta:{
+                    tittle:"待办指令",
+                    type:'协同调度',
+                    icon: require("@/assets/images/svg/todo.svg"),
+                    activePath:"/index/dispatch/todo"
+                }
+            },{
+                path:'/index/dispatch/done',
+                name:'done',
+                component:()=>import("@/views/test/dispatch/deal.vue"),
+                meta:{
+                    tittle:"已完成",
+                    type:'协同调度',
+                    icon: require("@/assets/images/svg/done.svg"),
+                    activePath:"/index/dispatch/done"
+                }
+            }]
+        },{
+            path:"/index/setting",
+            name:"参数设置",
+            component: { render: h => h("router-view") },
+            children:[{
+                path:'/index/setting/dataDictionary',
+                name:"dataDir",
+                component:()=>import("@/views/test/data/dataDir.vue"),
+                meta:{
+                    tittle:"数据字典",
+                    type:'参数设置',
+                    icon: require("@/assets/images/svg/dataDictionary.svg"),
+                    activePath:"/index/setting/dataDictionary"
+                }
+            }]
+        }]
+    },]
+})
+// 登录判断
+router.beforeEach((to,from,next)=>{
+    if(to.name == 'login'){
+        next()
+    }else{
+        if(sessionStorage.userinfo){
+            next()
+        }else{
+            // alert("111")
+            // to.name = 'login'
+            next(`/login`)
+        }
+    }
+    
+})
+export default router
+
+
+
+
+
+
+

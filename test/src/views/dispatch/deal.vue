@@ -1,0 +1,173 @@
+<template>
+  <div class="container">
+    <trackDialog :options="trackOptions"></trackDialog>
+    <div class="serch_bar">
+      <div class="serch_box">
+        <el-date-picker
+          v-model="createTime"
+          value-format="yyyy-MM-dd HH:mm"
+          format="yyyy-MM-dd HH:mm"
+          type="datetime"
+          placeholder="创建时间"
+        >
+        </el-date-picker>
+        <el-date-picker
+          v-model="planTime"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm"
+          format="yyyy-MM-dd HH:mm"
+          placeholder="有效时间"
+        >
+        </el-date-picker>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="serchDis"
+        ></el-button>
+      </div>
+    </div>
+    <div class="table_box">
+      <commonTable :init="tableInit" :tableData="tableData">
+        <template slot="operate" slot-scope="scope">
+          <el-button type="success" @click="watch(scope.row)">查看</el-button>
+        </template>
+      </commonTable>
+    </div>
+    <pagination :pageParams="pageParams" :total="pageParams.total"></pagination>
+  </div>
+</template>
+<script>
+import commonTable from "@/components/table/commonTable.vue";
+import trackDialog from "@/views/components/trackDialog.vue";
+import pagination from "@/components/table/pagination.vue";
+export default {
+  data() {
+    return {
+      createTime: "",
+      planTime: "",
+      trackOptions: {
+        dialogVisible: false,
+        title: "指令查看",
+        details: {
+          name: "",
+          creatorNote: "",
+          createTime: "",
+          planTime: "",
+          note: "",
+          completeTime: "2020-12-04 18:39",
+          //完成/终止人
+          executePersonNote: "",
+          //完成/终止说明
+          explain: "",
+          state: "",
+          //预览数据
+          list: "",
+        },
+      },
+      tableInit: {
+        options: [
+          { label: "指令名称", prop: "name" },
+          { label: "执行单位", prop: "stationName" },
+          { label: "创建时间", prop: "createTime" },
+          { label: "提交人", prop: "dealerNote" },
+          { label: "计划完成时间", prop: "planTime" },
+          { label: "指令描述", prop: "note" },
+          {
+            label: "状态",
+            prop: "state",
+            format: (row) => {
+              return row.state == 0
+                ? "指令下达"
+                : row.state == 1
+                ? "指令终止"
+                : "已完成";
+            },
+          },
+          { label: "操作", prop: "operate", width: "200" },
+        ],
+        config: {
+          index: {
+            method: (val) => val + 1,
+          },
+          rowClassName(row) {
+            if ((row.rowIndex + 1) % 2 == 0) {
+              return "evenCows";
+            } else {
+              return "oddCows";
+            }
+          },
+        },
+      },
+      tableData: [
+        {
+          completeTime: "2020-12-04 17:40",
+          createTime: "2020-12-04 17:39",
+          creator: "4cfb5f1e-0ce4-410a-a8ba-aedfe5bbc552",
+          creatorNote: "生产测试用户",
+          executePerson: "95452db3-3765-4fc6-8d70-fc8db3d887e8",
+          executePersonNote: "中江首站班长",
+          explain: "123213",
+          id: "7fb27c740e2ceeba2f3108e58fe53098",
+          list: "",
+          name: "123",
+          note: "21321",
+          orderUnit: "",
+          planTime: "2020-12-04 17:39",
+          state: 2,
+          stationId: "58ca0d19-34ca-43e4-941e-8b60b9d4e319",
+          stationName: "执行单位",
+          dealerNote: "张丹",
+        },
+        {
+          completeTime: "2020-12-04 17:40",
+          createTime: "2020-12-04 17:39",
+          creator: "4cfb5f1e-0ce4-410a-a8ba-aedfe5bbc552",
+          creatorNote: "生产测试用户",
+          executePerson: "95452db3-3765-4fc6-8d70-fc8db3d887e8",
+          executePersonNote: "中江首站班长",
+          explain: "123213",
+          id: "7fb27c740e2ceeba2f3108e58fe53098",
+          list: "",
+          name: "123",
+          note: "21321",
+          orderUnit: "",
+          planTime: "2020-12-04 17:39",
+          state: 2,
+          stationId: "58ca0d19-34ca-43e4-941e-8b60b9d4e319",
+          stationName: "执行单位",
+          dealerNote: "李思",
+        },
+      ],
+      pageParams: {
+        pageNum: 1,
+        pageSize: 10,
+        total: 60,
+      },
+    };
+  },
+  components: { commonTable, pagination, trackDialog },
+  methods: {
+    watch(row) {
+      this.trackOptions.dialogVisible = true;
+      this.trackOptions.details = row;
+    },
+    serchDis() {},
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.container {
+  padding: 10px 20px;
+  .serch_bar {
+    margin-bottom: 10px;
+    .el-input {
+      margin-right: 10px;
+    }
+    .el-select {
+      margin-right: 10px;
+      width: 200px;
+    }
+  }
+}
+</style>
