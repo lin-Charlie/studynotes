@@ -1,0 +1,80 @@
+.dialog-container {
+    .el-dialog{
+      border-radius: 5px;
+      .el-dialog__header {
+        border-bottom: 1px solid #e6e8eb;
+        background:#F2F2F2;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        .el-dialog__title {
+          font-size: 24px;
+          font-weight: 500;
+          color: #333;
+        }
+        .el-dialog__close{
+          color: #333;
+        }
+      }
+      .el-dialog__body{
+        border-bottom: 1px solid #e6e8eb;
+        padding: 15px;
+        min-height: 300px;
+        max-height: 500px;
+        overflow: auto;
+        &::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        &::-webkit-scrollbar-track {
+          background: #fff;
+          border-radius: 2px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background: #ccc;
+          border-radius: 4px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+          background: #9c9b9b;
+        }
+      }
+    }
+
+    .el-collapse {
+      border-top: none;
+      .el-collapse-item__header,
+      .el-collapse-item__wrap {
+        font-size: 18px;
+        border-bottom-style: dashed;
+      }
+    }
+  }
+  .el-message-box__message{
+    word-break: break-all;
+  }
+  .is-disabled {
+    .el-textarea__inner {
+      color: #606266 !important;
+    }
+  }
+  .el-message {
+    z-index: 3002 !important;
+  }
+  .el-select .el-input__inner {
+    font-size: 16px;
+  }
+  .el-date-editor .el-range-input {
+    font-size: 16px;
+  }
+  .el-cascader .el-input .el-input__inner {
+    font-size: 16px;
+  }
+  .el-input__inner {
+    font-size: 16px;
+  }
+  .el-tooltip__popper.is-dark {
+    font-size: 16px;
+  }
+  .el-table__empty-text {
+    font-size: 16px;
+  }
+  
