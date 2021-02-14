@@ -1,13 +1,4 @@
 import request from "@/utils/request.js"
-const BASE = "management"
-
-export function login(data){
-    return request({
-        url:`/${BASE}/login`,
-        method:"post",
-        data
-    })
-}
 
 export function login2(data){
     return request({

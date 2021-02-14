@@ -2,14 +2,14 @@
   <el-table
     ref="tableData"
     style="width: 100%"
-    height="100%"
+    highlight-current-row
+    :height="init.config.height || '100%'"
     :data="tableData"
     :size="init.config.size"
+    :default-expand-all="init.config.defaultExpandAll"
     :show-header="
       init.config.showHeader !== undefined ? init.config.showHeader : true
     "
-    :lazy="init.config.lazy ? init.config.lazy : false"
-    :tree-props="init.config.treeProps"
     :stripe="init.config.stripe"
     :border="init.config.border"
     :header-cell-style="headerCellStyle"
@@ -19,23 +19,27 @@
     :header-cell-class-name="headerCellClassName"
     :cell-style="cellStyle"
     :row-key="init.config.rowKey"
-    :load="init.config.load"
+    :tree-props="init.config.treeProps || { children: 'child' }"
+    :default-sort="init.config.defaultSort"
+    :indent="init.config.indent || 16"
     @row-click="rowClick"
     @row-dblclick="rowDblclick"
     @cell-click="cellClick"
     @cell-dblclick="cellDblclick"
     @header-click="headerClick"
     @selection-change="handleSelectionChange"
-    @select="select"
-    @select-all="selectAll"
+    @current-change="handleCurrentChange"
   >
     <!-- 表格前部插槽 -->
     <slot name="prepend"> 表格头附加内容 </slot>
     <!-- 多选 -->
     <el-table-column
       type="selection"
-      :reserve-selection="init.config.reserveSelect ? init.config.reserveSelect : false"
       v-if="init.config.selection"
+      :selectable="init.config.selection.selectable"
+      :reserve-selection="
+        init.config.reserveSelect ? init.config.reserveSelect : false
+      "
       :fixed="init.config.selection.fixed"
       :width="init.config.selection.width"
       :align="
@@ -63,6 +67,7 @@
       :width="item.width"
       :fixed="item.fixed"
       :align="item.align ? item.align : 'left'"
+      :sortable="item.sortable"
       :show-overflow-tooltip="
         item.overflowTooltip !== undefined ? item.overflowTooltip : true
       "
@@ -75,10 +80,7 @@
           :column="scope.column"
           :row="scope.row"
         >
-        <el-input v-if="init.config.input && scope.$index==init.config.inputIdx" v-model="scope.row[item.prop]"></el-input>
-        <span v-if="!init.config.input || scope.$index!=init.config.inputIdx">
           {{ item.format ? item.format(scope.row) : scope.row[item.prop] }}
-        </span>
         </slot>
       </template>
     </el-table-column>
@@ -92,7 +94,7 @@
       <template slot-scope="scope">
         <el-dropdown
           trigger="click"
-          @command="handleCommand($event, scope.row)"
+          @command="handleCommand($event, scope.row, scope.$index)"
         >
           <span class="el-dropdown-link">{{ init.config.dropdown.text }}</span>
           <el-dropdown-menu slot="dropdown">
@@ -101,7 +103,7 @@
               :key="index"
               :command="item.key"
               :icon="item.icon ? item.icon : ''"
-              >{{ item.lable }}</el-dropdown-item
+              >{{ item.label }}</el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>
@@ -118,11 +120,12 @@
         <el-button
           v-for="(btn, index) in init.config.buttons.list"
           :key="index"
-          :type="btn.type || 'primary'"
+          :type="btn.type || 'default'"
           :size="btn.size"
-          @click.stop="handleCommand(btn.key, scope.row)"
+          :class="btn.class"
+          @click.stop="handleCommand(btn.key, scope.row, scope.$index)"
         >
-          {{ btn.lable }}
+          {{ btn.label }}
         </el-button>
       </template>
     </el-table-column>
@@ -165,8 +168,8 @@ export default {
   },
   methods: {
     //操作
-    handleCommand(e, row) {
-      this.$emit("handleCommand", e, row);
+    handleCommand(e, row, index) {
+      this.$emit("handleCommand", e, row, index);
     },
     // 行点击
     rowClick(row, column, event) {
@@ -192,11 +195,8 @@ export default {
     handleSelectionChange(val) {
       this.$emit("handleSelectionChange", val);
     },
-    select(selection, row){
-      this.$emit("select", selection, row);
-    },
-    selectAll(selection){
-      this.$emit("selectAll", selection);
+    handleCurrentChange(val) {
+      this.$emit("handleCurrentChange", val);
     },
     // 行类名
     rowClassName(row) {
@@ -247,9 +247,6 @@ export default {
           rowIndex,
           columnIndex,
         });
-    },
-    clearSelection(){
-      this.$refs.tableData.clearSelection()
     },
     // 单元格样式
     cellStyle({ row, column, rowIndex, columnIndex }) {

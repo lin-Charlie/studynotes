@@ -67,7 +67,7 @@ export default {
       MENUS: {
         [`/monitor/landinfo`]: require("@/assets/images/svg/baseInfo/deviceTypeManage.svg"),
         [`/monitor/soildata`]: require("@/assets/images/svg/baseInfo/deviceLedgerManage.svg"),
-        [`/monitor/sensorinfo`]: require("@/assets/images/svg/programme/workPackage.svg"),
+        [`/monitor/sensorinfo`]: require("@/assets/images/svg/runMaintain/dayManage.svg"),
         [`/emergency/sensorfault`]: require("@/assets/images/svg/baseInfo/dataDictionary.svg"),
         [`/emergency/soilcondition`]: require("@/assets/images/svg/programme/overhaulManage.svg"),
         [`/informationserve/datareport`]: require("@/assets/images/svg/programme/definiteCheckOrder.svg"),
@@ -76,7 +76,6 @@ export default {
         [`/produceplan/reportlog`]: require("@/assets/images/svg/programme/faultOrder.svg"),
         [`/produceplan/issued`]: require("@/assets/images/svg/runMaintain/initialManage.svg"),
 
-        [`/runMaintain/dayManage`]: require("@/assets/images/svg/runMaintain/dayManage.svg"),
         [`/runMaintain/monthManage`]: require("@/assets/images/svg/runMaintain/monthManage.svg"),
         [`/runMaintain/faultManage`]: require("@/assets/images/svg/runMaintain/faultManage.svg"),
         [`/monitor/deviceCount`]: require("@/assets/images/svg/monitor/deviceCount.svg"),

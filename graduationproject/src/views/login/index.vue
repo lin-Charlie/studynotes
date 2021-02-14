@@ -2,7 +2,6 @@
     <div class="login">
         <div class="login_tittle">
             <span class="tittle">惠民农业土壤信息采集系统</span><br>
-            <span class="product">智慧农业+科技引领发展</span>
         </div>
         <div class="wrap">
             <div class="login_box" @keydown.enter="logintest()">
@@ -148,7 +147,7 @@ export default {
 .login{
     height: 100%;
     background-color: rgb(2,40,70);
-    background: url('~@/assets/logo.png') no-repeat;
+    background: url('~@/assets/zhny1.jpg') no-repeat;
     background-size:cover;
     .login_tittle{
         @include center;

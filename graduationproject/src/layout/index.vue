@@ -43,7 +43,8 @@ export default {
   flex-direction: column;
   box-sizing: border-box;
   height: 100%;
-  background-image: url("~@/assets/images/bg/blue-bg.jpg");
+  background-image: url("~@/assets/zhny1.jpg");
+  // background-image: url("~@/assets/images/bg/blue-bg.jpg");
   background-size: 100% 100%;
   overflow: hidden;
   .gislife-header-container {

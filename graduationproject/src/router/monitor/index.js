@@ -18,18 +18,18 @@ export default [
                 activePath:'/monitor/landinfo'
             }
         },{
-            path:"/monitor/soildata",
-            name:"soildata",
-            component:soildata,
-            meta:{
-                activePath:'/monitor/soildata'
-            }
-        },{
             path:"/monitor/sensorinfo",
             name:"sensorinfo",
             component:sensorinfo,
             meta:{
                 activePath:'/monitor/sensorinfo'
+            }
+        },{
+            path:"/monitor/soildata",
+            name:"soildata",
+            component:soildata,
+            meta:{
+                activePath:'/monitor/soildata'
             }
         }
     ]
